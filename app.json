@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "E-LARA2",
+    "slug": "E-LARA2",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundlerIdentifier": "com.polsri.elara"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.polsri.elara"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "769726f2-1638-40a2-9d3c-c44eb2a2a1ea"
+      }
+    },
+    "scheme": "com.polsri.elara"
+  }
+}
