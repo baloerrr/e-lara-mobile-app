@@ -1,9 +1,19 @@
-import { View, Text, SafeAreaView, Pressable } from 'react-native'
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Pressable,
+  Image,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native'
 import React, { useContext, useState } from 'react'
 import { styles } from '../LoginScreen/LoginScreen'
 import { useNavigation } from '@react-navigation/native'
 import Input from '../../components/FormInput/Input'
 import { AuthContext } from '../../hooks/AuthProvider'
+import Header from '../../components/Header/Header'
+import ModalAlert from '../../components/Modal/ModalAlert'
 
 const LoginScreen = () => {
   const navigation = useNavigation()
@@ -11,7 +21,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const { login } = useContext(AuthContext)
+  const { login, message, isLoading, setIsLoading } = useContext(AuthContext)
 
   const handleLogin = () => {
     login(email, password)
@@ -20,6 +30,19 @@ const LoginScreen = () => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Header />
+        </View>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require('../../assets/E-Lara/landingImage.png')}
+            resizeMode="cover"
+            style={{
+              width: 400,
+              height: 310,
+            }}
+          />
+        </View>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             Wujudkan <Text style={styles.textOrange}>Impian Pendidikanmu</Text>
@@ -48,21 +71,26 @@ const LoginScreen = () => {
             />
           </View>
           <View>
-            <Pressable onPress={handleLogin} style={styles.buttonBlack}>
-              <Text style={styles.textButtonBlack}>MASUK</Text>
-            </Pressable>
+            <TouchableOpacity onPress={handleLogin} style={styles.buttonBlack}>
+              {isLoading ? (
+                <ActivityIndicator size="large" color="white" />
+              ) : (
+                <Text style={styles.textButtonBlack}>MASUK</Text>
+              )}
+            </TouchableOpacity>
           </View>
           <View style={styles.registerLink}>
-            <Text>Belum memiliki akun?</Text>
+            <Text style={styles.registerText}>Belum memiliki akun?</Text>
             <Pressable
               onPress={() => {
                 navigation.navigate('Register')
               }}
             >
-              <Text style={styles.textLink}>daftar</Text>
+              <Text style={styles.textLinkRegister}>daftar</Text>
             </Pressable>
           </View>
         </View>
+        {message ? <ModalAlert /> : ''}
       </View>
     </SafeAreaView>
   )

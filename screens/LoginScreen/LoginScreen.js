@@ -12,6 +12,18 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center'
     },
+
+    headerContainer: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        padding: 20
+    },
+
+    imageContainer: {
+        position: 'relative'
+    },
+
     titleContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
@@ -24,7 +36,7 @@ export const styles = StyleSheet.create({
     },
     spanTitle: {
         textAlign: 'center',
-        fontWeight: '400',
+        fontWeight: '500',
         fontSize: 11.7,
     },
     textOrange: {
@@ -40,19 +52,25 @@ export const styles = StyleSheet.create({
 
     input: {
         paddingVertical: 7,
-        paddingHorizontal: 70,
-        backgroundColor: '#f1f5f9',
+        paddingHorizontal: 10,
+        backgroundColor: '#f8faf9',
         borderRadius: 10,
-        width: '100%',
+        width: 320,
+        height: 55,
+        fontSize: 15
     },
 
     buttonBlack: {
         paddingVertical: 7,
-        paddingHorizontal: 72,
+        width: 320,
+        height: 55,
         borderRadius: 4,
         elevation: 3,
         backgroundColor: '#000322',
         borderRadius: 10,
+        flexDirection: 'column', 
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     textButtonBlack: {
@@ -66,10 +84,15 @@ export const styles = StyleSheet.create({
     registerLink: {
         flexDirection: 'row',
         justifyContent: 'center',
-        gap: 3
+        gap: 3,
     },
 
-    textLink: {
-        color: 'blue'
+    registerText: {
+        fontSize: 15
+    },
+
+    textLinkRegister: {
+        color: 'blue',
+        fontSize: 15
     }
 })

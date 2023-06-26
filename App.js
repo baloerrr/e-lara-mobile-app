@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import StackNavigator from './StackNavigator';
+import StackNavigator from './Navigations/StackNavigator';
 import { AuthProvider } from './hooks/AuthProvider';
 import 'expo-dev-client'
 

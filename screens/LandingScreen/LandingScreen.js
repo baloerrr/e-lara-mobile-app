@@ -10,12 +10,17 @@ export const styles = StyleSheet.create({
       backgroundColor: 'white',
       alignItems: 'center',
       flexDirection: 'column',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
+
+    imageContainer: {
+      position: 'relative'
+    },
+
     titleContainer: {
       flexDirection: 'column',
       justifyContent: 'center',
-      marginTop: 30,
+      marginTop: 30
     },
     title: {
       fontWeight: 'bold',
@@ -39,7 +44,7 @@ export const styles = StyleSheet.create({
   
     buttonBlack: {
       paddingVertical: 6,
-      paddingHorizontal: 70,
+      paddingHorizontal: 19,
       borderRadius: 4,
       elevation: 3,
       backgroundColor: 'black',
@@ -48,7 +53,7 @@ export const styles = StyleSheet.create({
   
     buttonBlue: {
       paddingVertical: 6,
-      paddingHorizontal: 12,
+      paddingHorizontal: 19,
       borderRadius: 4,
       elevation: 3,
       backgroundColor: '#1976d3',
@@ -65,25 +70,67 @@ export const styles = StyleSheet.create({
     },
   
     textButtonBlack: {
-      fontSize: 12,
+      fontSize: 15,
       lineHeight: 21,
       fontWeight: 'bold',
       letterSpacing: 0.25,
       color: 'white',
     },
     textButtonBlue: {
-      fontSize: 12,
+      fontSize: 15,
       lineHeight: 21,
       fontWeight: 'bold',
       letterSpacing: 0.25,
       color: 'white',
     },
     textButtonGray: {
-      fontSize: 12,
+      fontSize: 15,
       lineHeight: 21,
       fontWeight: 'bold',
       letterSpacing: 0.25,
       color: 'black',
+    },
+
+    elaraContainer: {
+      flexDirection: 'row',
+      gap: 10,
+      width: 250,
+      height: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    facebookContainer: {
+      flexDirection: 'row',
+      gap: 10,
+      width: 250,
+      height: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    buttonBlackImage: {
+      width: 26,
+      height: 26
+    },
+
+    facebookImage: {
+      height: 25,
+      width: 25,
+    },
+
+    googleContainer: {
+      flexDirection: 'row', 
+      gap: 10, 
+      width: 250,
+      height: 40,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+
+    googleImage: {
+      height: 25,
+      width: 25,
     },
 
     loginLink: {
@@ -91,5 +138,6 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 15
     }
+
   })
   

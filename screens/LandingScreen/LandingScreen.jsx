@@ -3,66 +3,19 @@ import {
   View,
   Text,
   TouchableHighlight,
-  Button,
+  Image,
 } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { styles } from '../LandingScreen/LandingScreen'
 import { AuthContext } from '../../hooks/AuthProvider'
-import { authServices } from '../../constants/service'
 import * as WebBrowser from 'expo-web-browser'
-import * as Google from 'expo-auth-session/providers/google'
-import { makeRedirectUri } from 'expo-auth-session'
 
 WebBrowser.maybeCompleteAuthSession()
 
 const LandingScreen = () => {
   const navigation = useNavigation()
-
-  const [token, setToken] = useState('')
-  const [user, setUser] = useState(null)
-  const { logout } = useContext(AuthContext)
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: authServices.androidClientId,
-    iosClientId: authServices.iosClientId,
-    expoClientId: authServices.expoClientId,
-    webClientId: authServices.webClientId,
-  })
-
-  useEffect(() => {
-    if (response?.type === 'success') {
-      setToken(response.authentication.accessToken)
-      getUser()
-    }
-  }, [response, token])
-
-  const getUser = async () => {
-    try {
-      const response = await fetch(
-        'https://www.googleapis.com/userinfo/v2/me',
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
-
-      const user = await response.json()
-      setUser(user)
-    } catch (error) {
-      Alert.alert('error', error.message)
-    }
-  }
-
-  const showUser = () => {
-    if (user) {
-      return (
-        <View>
-          <Text>Welcome {user.name}</Text>
-          <Text>{user.email}</Text>
-        </View>
-      )
-    }
-  }
+  const { getUser, token, promptAsync } = useContext(AuthContext)
 
   const loginNavigate = () => {
     navigation.navigate('Login')
@@ -71,6 +24,16 @@ const LandingScreen = () => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require('../../assets/E-Lara/landingImage.png')}
+            resizeMode="cover"
+            style={{
+              width: 400,
+              height: 310,
+            }}
+          />
+        </View>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             Wujudkan <Text style={styles.textOrange}>Impian Pendidikanmu</Text>
@@ -85,10 +48,25 @@ const LandingScreen = () => {
             onPress={loginNavigate}
             style={styles.buttonBlack}
           >
-            <Text style={styles.textButtonBlack}>LANJUTKAN</Text>
+            <View style={styles.elaraContainer}>
+              <Text style={styles.textButtonBlack}>LANJUTKAN</Text>
+              <Image
+                source={require('../../assets/E-Lara/top-right-angled.png')}
+                style={styles.buttonBlackImage}
+              />
+            </View>
           </TouchableHighlight>
           <TouchableHighlight style={styles.buttonBlue}>
-            <Text style={styles.textButtonBlue}>LANJUTKAN DENGAN FACEBOOK</Text>
+            <View style={styles.facebookContainer}>
+              <Image
+                source={require('../../assets/E-Lara/facebook.png')}
+                resizeMode="cover"
+                style={styles.facebookImage}
+              />
+              <Text style={styles.textButtonBlue}>
+                LANJUTKAN DENGAN FACEBOOK
+              </Text>
+            </View>
           </TouchableHighlight>
           <TouchableHighlight
             onPress={
@@ -98,33 +76,16 @@ const LandingScreen = () => {
             }
             style={styles.buttonGray}
           >
-            <Text style={styles.textButtonGray}>LANJUTKAN DENGAN GOOGLE</Text>
+            <View style={styles.googleContainer}>
+              <Image
+                source={require('../../assets/E-Lara/google.png')}
+                resizeMode="cover"
+                style={styles.googleImage}
+              />
+              <Text style={styles.textButtonGray}>LANJUTKAN DENGAN GOOGLE</Text>
+            </View>
           </TouchableHighlight>
-          <View>
-            {showUser()}
-            <Button
-              title={token ? 'get user data' : 'Login'}
-              onPress={
-                token
-                  ? getUser
-                  : () => promptAsync({ useProxy: false, showInRecents: true })
-              }
-            />
-          </View>
-          <View>
-            <Button title={'logout'} onPress={() => logout()} />
-          </View>
         </View>
-        {/* <View style={styles.loginLink}>
-          <Text style={styles.spanTitle}>Sudah memiliki akun? </Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate('Login')
-            }}
-          >
-            <Text style={styles.spanTitle}>masuk</Text>
-          </Pressable>
-        </View> */}
       </View>
     </SafeAreaView>
   )

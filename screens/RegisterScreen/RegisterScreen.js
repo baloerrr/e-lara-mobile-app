@@ -7,19 +7,22 @@ export const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
-        marginTop: 24,
         backgroundColor: 'white'
     },
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingHorizontal: 10,
+        justifyContent: 'space-between',
+        paddingHorizontal: 40,
         marginTop: 15
     },
     logoText: {
         fontWeight: 'bold',
         fontSize: 30
     },
+     elaraLogo: {
+        width: 55, 
+        height: 55 
+     },
 
     registerContainer: {
         flexDirection: 'column',
@@ -51,11 +54,11 @@ export const styles = StyleSheet.create({
 
     input: {
         paddingVertical: 7,
-        paddingHorizontal: 20,
-        backgroundColor: '#f1f5f9',
+        paddingHorizontal: 10,
+        backgroundColor: '#f8faf9',
         borderRadius: 10,
-        height: 40,
-        borderWidth: 1,
+        width: 320,
+        height: 60,
     },
 
     buttonBlack: {
@@ -65,6 +68,11 @@ export const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: '#000322',
         borderRadius: 10,
+        width: 320,
+        height: 55,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     textButtonBlack: {
@@ -74,4 +82,20 @@ export const styles = StyleSheet.create({
         letterSpacing: 0.25,
         color: 'white',
     },
+
+    loginLink: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 3,
+        marginTop: -10
+    },
+
+    loginText: {
+        fontSize: 15
+    },
+
+    textLinkLogin: {
+        color: 'blue',
+        fontSize: 15
+    }
 })
