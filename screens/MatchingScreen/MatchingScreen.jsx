@@ -10,7 +10,7 @@ import Swiper from 'react-native-deck-swiper'
 import { Entypo, AntDesign, Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../firebase'
 import { AuthContext } from '../../hooks/AuthProvider'
-import { useNavigation } from '@react-navigation/native'
+import HeaderComponent from '../../components/Header/HeaderComponent'
 
 const beasiswaData = [
   {
@@ -59,6 +59,14 @@ const MatchingScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}
+      >
+        <HeaderComponent />
+      </View>
       <View style={{ flex: 1 }}>
         <View
           style={{
@@ -80,8 +88,8 @@ const MatchingScreen = () => {
               left: {
                 title: 'NOPE',
                 style: {
-                  textAlign: 'right',
-                  color: 'red',
+                  // textAlign: 'flex-end',
+                  color: '#FF0000',
                 },
               },
               right: {
@@ -138,8 +146,20 @@ const MatchingScreen = () => {
                       borderBottomEndRadius: 15,
                     }}
                   >
-                    <View style={{}}>
-                      <Text>{card.namaBeasiswa}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 35,
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {card.namaBeasiswa}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -180,6 +200,22 @@ const MatchingScreen = () => {
             }}
           >
             <Entypo name="cross" size={24} color={'white'} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {}}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'orange',
+              padding: 10,
+              borderRadius: 15,
+              alignItems: 'center',
+              width: 170,
+            }}
+          >
+            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold' }}>
+              GET IT
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity

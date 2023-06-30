@@ -2,7 +2,7 @@ import { Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-const Header = (props) => {
+const HeaderBack = (props) => {
   const navigation = useNavigation()
 
   const handleBack = () => {
@@ -15,4 +15,4 @@ const Header = (props) => {
   )
 }
 
-export default Header
+export default HeaderBack

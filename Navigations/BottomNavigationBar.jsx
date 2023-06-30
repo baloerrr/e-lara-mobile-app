@@ -1,11 +1,10 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen/HomeScreen'
-import MatchingScreen from '../screens/MatchingScreen/MatchingScreen.jsx'
 import DonateScreen from '../screens/DonateScreen/DonateScreen.jsx'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen.jsx'
 import FormMatching from '../screens/FormMatching/FormMatching.jsx'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const Tab = createBottomTabNavigator()
 
@@ -18,22 +17,22 @@ const BottomNavigationBar = () => {
           let iconName
           let rn = route.name
 
-          if (rn === 'Home2') {
+          if (rn === 'Beranda') {
             iconName = focused ? 'home' : 'home-outline'
-          } else if (rn === 'FormMatching') {
-            iconName = focused ? 'home' : 'home-outline'
-          } else if (rn === 'Donate') {
-            iconName = focused ? 'home' : 'home-outline'
+          } else if (rn === 'Form Matching') {
+            iconName = focused ? 'puzzle' : 'puzzle-outline'
+          } else if (rn === 'Donasi') {
+            iconName = focused ? 'gift' : 'gift-outline'
           } else if (rn === 'Profile') {
-            iconName = focused ? 'person' : 'person-outline'
+            iconName = focused ? 'account' : 'account-outline'
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />
+          return <Ionicons name={iconName} size={32} color={color} />
         },
         headerShown: false,
         tabBarActiveTintColor: 'grey',
         tabBarStyle: {
-          height: 60,
+          height: 65,
           position: 'absolute',
           bottom: 16,
           right: 16,
@@ -44,24 +43,27 @@ const BottomNavigationBar = () => {
       })}
     >
       <Tab.Screen
-        name="Home2"
+        name="Beranda"
         component={HomeScreen}
         options={{
           headerShown: false,
+          tabBarShowLabel: false,
         }}
       />
       <Tab.Screen
-        name="FormMatching"
+        name="Form Matching"
         component={FormMatching}
         options={{
           headerShown: false,
+          tabBarShowLabel: false,
         }}
       />
       <Tab.Screen
-        name="Donate"
+        name="Donasi"
         component={DonateScreen}
         options={{
           headerShown: false,
+          tabBarShowLabel: false,
         }}
       />
       <Tab.Screen
@@ -69,6 +71,7 @@ const BottomNavigationBar = () => {
         component={ProfileScreen}
         options={{
           headerShown: false,
+          tabBarShowLabel: false,
         }}
       />
     </Tab.Navigator>

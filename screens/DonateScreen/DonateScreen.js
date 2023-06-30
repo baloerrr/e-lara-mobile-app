@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
         width: width,
         flexDirection: 'column',
         alignItems: 'center',
+    },
+    header: {
+        
     }
 })
 

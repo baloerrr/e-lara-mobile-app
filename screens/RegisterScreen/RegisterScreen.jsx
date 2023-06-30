@@ -7,8 +7,6 @@ import {
   ActivityIndicator,
   Pressable,
   Image,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native'
 import React, { useState } from 'react'
 import { styles } from './RegisterScreen'
@@ -17,6 +15,7 @@ import { firebase } from '../../firebase'
 import Input from '../../components/FormInput/Input'
 import InputPhone from '../../components/FormInput/InputPhone'
 import ModalAlert from '../../components/Modal/ModalAlert'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('')
@@ -59,10 +58,9 @@ const RegisterScreen = () => {
   }
   return (
     <SafeAreaView>
-      <KeyboardAvoidingView
-        enabled
-        behavior={Platform.OS === 'android' ? 'padding' : 'height'}
-        style={styles.container}
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.header}>
           <View>
@@ -156,7 +154,7 @@ const RegisterScreen = () => {
           </View>
           {message ? <ModalAlert /> : ''}
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   )
 }

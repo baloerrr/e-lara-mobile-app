@@ -6,13 +6,15 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { styles } from '../LoginScreen/LoginScreen'
 import { useNavigation } from '@react-navigation/native'
 import Input from '../../components/FormInput/Input'
 import { AuthContext } from '../../hooks/AuthProvider'
-import Header from '../../components/Header/Header'
+import HeaderBack from '../../components/Header/HeaderBack'
 import ModalAlert from '../../components/Modal/ModalAlert'
 
 const LoginScreen = () => {
@@ -28,10 +30,13 @@ const LoginScreen = () => {
   }
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
         <View style={styles.headerContainer}>
-          <Header />
+          <HeaderBack />
         </View>
         <View style={styles.imageContainer}>
           <Image
@@ -91,7 +96,7 @@ const LoginScreen = () => {
           </View>
         </View>
         {message ? <ModalAlert /> : ''}
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
