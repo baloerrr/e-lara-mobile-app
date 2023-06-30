@@ -1,416 +1,229 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { View, TextInput, Button, Text, ScrollView } from 'react-native'
 import Swiper from 'react-native-deck-swiper'
 
+const userVector = {
+  ipk: 3.6,
+  semester: 3,
+  jurusan: 'Teknik Mesin',
+  tipePendanaan: 0,
+  jenjang: 'S1',
+  rangeUangSaku: [500000, 1500000],
+}
+
 const beasiswaData = [
   {
-    id: 163,
+    id: 1,
+    nama: 'BANK BI',
+    ipk: 3.0,
+    semester: 3,
+    jurusan: ['Teknik Komputer', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S2', 'D3'],
+    rangeUangSaku: [500000, 1500000],
+  },
+  {
+    id: 2,
+    nama: 'DIcoding',
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
+  },
+  {
+    id: 3,
+    nama: 'Salemba Empat',
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
+  },
+  {
+    id: 4,
+    nama: 'Koridor',
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
+  },
+  {
+    id: 5,
+    nama: 'LPDP',
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
+  },
+  {
+    id: 6,
     nama: 'Beasiswa A',
-    ipk_min: 3.0,
-    semester_min: 3,
-    jurusan: 'Teknik Informatika',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'S1',
-    range_uang_saku: [500000, 1000000],
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
   },
   {
-    id: 165,
-    nama: 'Beasiswa L',
-    ipk_min: 3.0,
-    semester_min: 3,
-    jurusan: 'Teknik Komputer',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'S1',
-    range_uang_saku: [500000, 1000000],
-  },
-  {
-    id: 273,
+    id: 7,
     nama: 'Beasiswa B',
-    ipk_min: 3.0,
-    semester_min: 2,
-    jurusan: 'Teknik Komputer',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'D3',
-    range_uang_saku: [800000, 1200000],
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
   },
   {
-    id: 173,
-    nama: 'Beasiswa z',
-    ipk_min: 3.0,
-    semester_min: 2,
-    jurusan: 'Teknik Komputer',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
+    id: 8,
+    nama: 'Beasiswa C',
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
   },
   {
-    id: 133,
-    nama: 'Beasiswa c',
-    ipk_min: 3.0,
-    semester_min: 4,
-    jurusan: 'Teknik Elektro',
-    tipe_pendanaan: 'Partial Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 3000000],
-  },
-  {
-    id: 532,
+    id: 9,
     nama: 'Beasiswa D',
-    ipk_min: 3.0,
-    semester_min: 1,
-    jurusan: 'Ekonomi',
-    tipe_pendanaan: 'Partial Funded',
-    jenjang: 'S1',
-    range_uang_saku: [500000, 1200000],
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1'],
+    rangeUangSaku: [100000, 2000000],
   },
   {
-    id: 534,
+    id: 10,
     nama: 'Beasiswa E',
-    ipk_min: 3.0,
-    semester_min: 3,
-    jurusan: 'Teknik Elektro',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Teknik Mesin', 'Teknik Elektro'],
+    tipePendanaan: 0,
+    jenjang: ['S1, D3, D4'],
+    rangeUangSaku: [100000, 2000000],
   },
   {
-    id: 560,
+    id: 11,
     nama: 'Beasiswa F',
-    ipk_min: 3.0,
-    semester_min: 4,
-    jurusan: 'Ekonomi',
-    tipe_pendanaan: 'Partial Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
+    ipk: 3.5,
+    semester: 4,
+    jurusan: ['Manajemen'],
+    tipePendanaan: 0,
+    jenjang: ['D3, D4'],
+    rangeUangSaku: [100000, 2000000],
   },
-  {
-    id: 730,
-    nama: 'Beasiswa G',
-    ipk_min: 3.0,
-    semester_min: 2,
-    jurusan: 'Teknik Elektro',
-    tipe_pendanaan: 'Partial Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 821,
-    nama: 'Beasiswa H',
-    ipk_min: 3.0,
-    semester_min: 2,
-    jurusan: 'Ekonomi',
-    tipe_pendanaan: 'Partial Funded',
-    jenjang: 'D3',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 143,
-    nama: 'Beasiswa I',
-    ipk_min: 3.0,
-    semester_min: 6,
-    jurusan: 'Teknik Elektro',
-    tipe_pendanaan: 'Partial Funded',
-    jenjang: 'D3',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 521,
-    nama: 'Beasiswa J',
-    ipk_min: 3.0,
-    semester_min: 1,
-    jurusan: 'Ekonomi',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 381,
-    nama: 'Beasiswa K',
-    ipk_min: 3.0,
-    semester_min: 3,
-    jurusan: 'Ekonomi',
-    tipe_pendanaan: 'Swasta',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 124,
-    nama: 'Beasiswa L',
-    ipk_min: 3.0,
-    semester_min: 2,
-    jurusan: 'Teknik Informatika',
-    tipe_pendanaan: 'Swasta',
-    jenjang: 'D3',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 732,
-    nama: 'Beasiswa M',
-    ipk_min: 3.0,
-    semester_min: 2,
-    jurusan: 'Ilmu Komunikasi',
-    tipe_pendanaan: 'Swasta',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 832,
-    nama: 'Beasiswa N',
-    ipk_min: 3.0,
-    semester_min: 3,
-    jurusan: 'Ekonomi',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
-  },
-  {
-    id: 972,
-    nama: 'Beasiswa O',
-    ipk_min: 3.0,
-    semester_min: 1,
-    jurusan: 'Ilmu Komunikasi',
-    tipe_pendanaan: 'Fully Funded',
-    jenjang: 'S1',
-    range_uang_saku: [800000, 1200000],
-  },
-  // Tambahkan data beasiswa lainnya di sini
+  // Tambahkan data beasiswa lainnya sesuai kebutuhan
 ]
 
-const PencarianBeasiswa = () => {
-  const [ipk, setIpk] = useState('')
-  const [semester, setSemester] = useState('')
-  const [jurusan, setJurusan] = useState('')
-  const [tipePendanaan, setTipePendanaan] = useState('')
-  const [jenjang, setJenjang] = useState('')
-  const [rangeUangSaku, setRangeUangSaku] = useState('')
-  const [hasilPencarian, setHasilPencarian] = useState([])
-  const [displayResults, setDisplayResults] = useState(false)
-  const swipeRef = useRef(null)
+function calculateCosineSimilarity(vectorA, vectorB) {
+  const matchingValues = [
+    vectorA.ipk >= vectorB.ipk,
+    vectorA.semester >= vectorB.semester,
+    Array.isArray(vectorB.jurusan) &&
+      (vectorA.jurusan === vectorB.jurusan ||
+        vectorB.jurusan.includes(vectorA.jurusan)),
+    vectorA.tipePendanaan === vectorB.tipePendanaan,
+    Array.isArray(vectorB.jenjang) &&
+      (vectorA.jenjang === vectorB.jenjang ||
+        vectorB.jenjang.includes(vectorA.jenjang)),
+    vectorA.rangeUangSaku[0] >= vectorB.rangeUangSaku[0] &&
+      vectorA.rangeUangSaku[1] <= vectorB.rangeUangSaku[1],
+  ]
 
-  const cariBeasiswa = () => {
-    const hasil = beasiswaData.filter((beasiswa) => {
-      return (
-        beasiswa.ipk_min <= parseFloat(ipk) &&
-        beasiswa.semester_min <= parseInt(semester) &&
-        beasiswa.jurusan === jurusan &&
-        beasiswa.tipe_pendanaan === tipePendanaan &&
-        beasiswa.jenjang === jenjang &&
-        beasiswa.range_uang_saku[0] <= parseFloat(rangeUangSaku) &&
-        beasiswa.range_uang_saku[1] >= parseFloat(rangeUangSaku)
-      )
-    })
+  const dotProduct = matchingValues.reduce(
+    (sum, value) => sum + (value ? 1 : 0),
+    0,
+  )
+  const magnitudeVectorA = Math.sqrt(matchingValues.length)
+  const magnitudeVectorB = Math.sqrt(Object.values(vectorB).length)
 
-    const sortedHasil = hasil.sort((a, b) => {
-      const kecocokanA = calculateMatchingScore(a)
-      const kecocokanB = calculateMatchingScore(b)
-      return kecocokanB - kecocokanA
-    })
+  const cosineSimilarity = dotProduct / (magnitudeVectorA * magnitudeVectorB)
+  return cosineSimilarity
+}
 
-    const threshold = 0.1
+const BeasiswaScreen = () => {
+  const [matchingBeasiswa, setMatchingBeasiswa] = useState([])
 
-    const beasiswaMirip = sortedHasil.filter((beasiswa) => {
-      const kecocokan = calculateMatchingScore(beasiswa)
-      return kecocokan > threshold
-    })
+  useEffect(() => {
+    const findMatchingBeasiswa = () => {
+      const matchedBeasiswa = []
 
-    setHasilPencarian(beasiswaMirip)
-    setDisplayResults(true)
+      for (const beasiswa of beasiswaData) {
+        const cosineSimilarity = calculateCosineSimilarity(userVector, beasiswa)
+
+        matchedBeasiswa.push({
+          beasiswa: beasiswa,
+          cosineSimilarity: cosineSimilarity,
+        })
+      }
+
+      matchedBeasiswa.sort((a, b) => b.cosineSimilarity - a.cosineSimilarity)
+
+      return matchedBeasiswa.slice(0, 10) // Ambil 10 beasiswa teratas
+    }
+
+    const matchedBeasiswa = findMatchingBeasiswa()
+    setMatchingBeasiswa(matchedBeasiswa)
+  }, [])
+
+  const renderCard = (card) => {
+    const beasiswa = card.beasiswa
+    const cosineSimilarity = card.cosineSimilarity
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          height: 300,
+        }}
+      >
+        <Text>{beasiswa.nama}</Text>
+        <Text>Cosine Similarity: {cosineSimilarity}</Text>
+      </View>
+    )
   }
 
-  const calculateMatchingScore = (beasiswa) => {
-    let matchingScore = 0
-
-    if (parseFloat(ipk) >= beasiswa.ipk_min) {
-      matchingScore += 1
-    }
-
-    if (parseInt(semester) >= beasiswa.semester_min) {
-      matchingScore += 1
-    }
-
-    if (jurusan !== '' && beasiswa.jurusan === jurusan) {
-      matchingScore += 1
-    }
-
-    if (tipePendanaan !== '' && beasiswa.tipe_pendanaan === tipePendanaan) {
-      matchingScore += 1
-    }
-
-    if (jenjang !== '' && beasiswa.jenjang === jenjang) {
-      matchingScore += 1
-    }
-
-    if (rangeUangSaku !== '') {
-      const uangSaku = parseFloat(rangeUangSaku)
-      if (
-        uangSaku >= beasiswa.range_uang_saku[0] &&
-        uangSaku <= beasiswa.range_uang_saku[1]
-      ) {
-        matchingScore += 1
-      }
-    }
-
-    const totalKriteria = 6 // Jumlah kriteria pencarian
-
-    const matchingPercentage = matchingScore / totalKriteria
-
-    // Tambahkan faktor-faktor kecocokan lainnya sesuai kebutuhan
-
-    return matchingPercentage
+  const onSwipedAllCards = () => {
+    console.log('Semua beasiswa telah ditampilkan')
   }
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      {displayResults ? (
+    <View style={{ flex: 1 }}>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+        Top 10 Beasiswa:
+      </Text>
+      {matchingBeasiswa.length > 0 ? (
         <Swiper
-          stackSize={5}
+          cards={matchingBeasiswa}
+          renderCard={renderCard}
+          onSwipedAll={onSwipedAllCards}
+          stackSize={3}
+          stackSeparation={15}
           cardIndex={0}
-          verticalSwipe={false}
+          backgroundColor="transparent"
+          animateOverlayLabelsOpacity
           animateCardOpacity
-          ref={swipeRef}
-          overlayLabels={{
-            left: {
-              title: 'NOPE',
-              style: {
-                // textAlign: 'flex-end',
-                color: '#FF0000',
-              },
-            },
-            right: {
-              title: 'Match',
-              style: {
-                label: {
-                  color: '#4DED30',
-                },
-              },
-            },
-          }}
-          containerStyle={{
-            backgroundColor: 'transparent',
-          }}
-          cards={hasilPencarian}
-          renderCard={(card) =>
-            card ? (
-              <View
-                key={card.id}
-                style={{
-                  backgroundColor: 'white',
-                  height: 500,
-                  borderRadius: 15,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {/* <Image
-                source={{ uri: card.gambar }}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  height: 350,
-                  width: 300,
-                  borderRadius: 15,
-                  marginTop: 60,
-                }}
-                resizeMode="contain"
-              /> */}
-
-                <View
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    backgroundColor: '',
-                    height: 50,
-                    paddingHorizontal: 6,
-                    paddingVertical: 2,
-                    borderBottomStartRadius: 15,
-                    borderBottomEndRadius: 15,
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 35,
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {card.nama}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            ) : (
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  height: 500,
-                  borderRadius: 15,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                }}
-              >
-                <Text style={{ fontWeight: 'bold' }}>Tidak Ada beasiswa</Text>
-              </View>
-            )
-          }
+          swipeBackCard
         />
       ) : (
-        <View>
-          <TextInput
-            placeholder="IPK"
-            value={ipk}
-            onChangeText={setIpk}
-            keyboardType="numeric"
-            style={{ marginBottom: 10 }}
-          />
-          <TextInput
-            placeholder="Semester"
-            value={semester}
-            onChangeText={setSemester}
-            keyboardType="numeric"
-            style={{ marginBottom: 10 }}
-          />
-          <TextInput
-            placeholder="Jurusan"
-            value={jurusan}
-            onChangeText={setJurusan}
-            style={{ marginBottom: 10 }}
-          />
-          <TextInput
-            placeholder="Tipe Pendanaan"
-            value={tipePendanaan}
-            onChangeText={setTipePendanaan}
-            style={{ marginBottom: 10 }}
-          />
-          <TextInput
-            placeholder="Jenjang"
-            value={jenjang}
-            onChangeText={setJenjang}
-            style={{ marginBottom: 10 }}
-          />
-          <TextInput
-            placeholder="Range Uang Saku"
-            value={rangeUangSaku}
-            onChangeText={setRangeUangSaku}
-            keyboardType="numeric"
-            style={{ marginBottom: 10 }}
-          />
-          <Button title="Cari Beasiswa" onPress={cariBeasiswa} />
-        </View>
+        <Text>Tidak ada beasiswa yang cocok</Text>
       )}
     </View>
   )
 }
 
-export default PencarianBeasiswa
+export default BeasiswaScreen
 
 // import {
 //   View,
