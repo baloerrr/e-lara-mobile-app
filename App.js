@@ -7,9 +7,9 @@ import 'expo-dev-client'
 export default function App() {
   return (
     <AuthProvider>
-      <NavigationContainer>
-        <StackNavigator/>
-      </NavigationContainer>
+        <NavigationContainer>
+          <StackNavigator/>
+        </NavigationContainer>
     </AuthProvider>
   )
 }

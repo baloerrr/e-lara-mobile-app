@@ -8,6 +8,7 @@ import DonateScreen from '../screens/DonateScreen/DonateScreen.jsx'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen.jsx'
 import { AuthContext } from '../hooks/AuthProvider'
 import BottomNavigationBar from './BottomNavigationBar.jsx'
+import CobaanScreen from '../screens/CobaanScreen/CobaanScreen.jsx'
 
 const Stack = createNativeStackNavigator()
 
@@ -41,6 +42,13 @@ const StackNavigator = () => {
           <Stack.Screen
             name="Profile"
             component={ProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Percobaan"
+            component={CobaanScreen}
             options={{
               headerShown: false,
             }}

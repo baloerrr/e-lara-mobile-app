@@ -14,6 +14,7 @@ const AuthProvider = ({children}) => {
     const [message, setMessage] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
 
+
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId: authServices.androidClientId,
         iosClientId: authServices.iosClientId,
@@ -28,6 +29,49 @@ const AuthProvider = ({children}) => {
         }
     }, [response, token])
 
+    const register = async (registerData) => {
+      const { email, password, namaLengkap, tempatLahir, tanggalLahir, noHandphone, imageUri} = registerData;
+  
+      setIsLoading(true);
+  
+      try {
+        const authResult = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const timestamps = firebase.firestore.FieldValue.serverTimestamp()
+        const user = authResult.user;
+
+        const response = await fetch(imageUri)
+        const blob = await response.blob()
+
+        // const filename = imageUri.substring(imageUri.lastIndexOf('/')+1)
+        const storageRef = firebase.storage().ref().child(`user_images/${user.uid}`)
+    
+        await storageRef.put(blob)
+        const downloadUrl = await storageRef.getDownloadURL()
+  
+        await user.sendEmailVerification({
+          handleCodeInApp: true,
+          url: 'https://e-lara-6b5ba.firebaseapp.com',
+        });
+  
+        Alert.alert('Email Verification was sent');
+        await firebase.firestore().collection('users').doc(user.uid).set({
+          namaLengkap,
+          email,
+          tempatLahir,
+          tanggalLahir,
+          noHandphone,
+          gambarUrl: downloadUrl,
+          createdAt: timestamps 
+        });
+  
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error.message);
+      }
+    };
+    
+
     const login = (email, password) => {
       setIsLoading(true)
       if(email == '' || password == '') {
@@ -36,8 +80,17 @@ const AuthProvider = ({children}) => {
       }  else {
         firebase.auth().signInWithEmailAndPassword(email, password).then((res) => {
             setIsLoading(false)
-            setUser(res.user)
-            Alert.alert("Success", "Login Berhasil")
+            const user = res.user
+
+            if(user.emailVerified) {
+              setUser(user)
+              Alert.alert("Success", "Login Berhasil")
+            } else {
+              firebase.auth().signOut();
+              setMessage('Email belum terverifikasi. Silakan verifikasi email Anda.');
+              setModalVisible(true);
+            }
+
         }).catch(error => {
           if (error.code === 'auth/invalid-email') {
             setMessage('Email tidak valid');
@@ -84,6 +137,7 @@ const AuthProvider = ({children}) => {
       setModalVisible,
       isLoading,
       setIsLoading,
+      register,
       login, 
       logout, 
       getUser, 

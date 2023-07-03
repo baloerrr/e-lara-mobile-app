@@ -1,351 +1,183 @@
-import React, { useRef, useState } from 'react'
-import { View, TextInput, Button, Text } from 'react-native'
-import Swiper from 'react-native-deck-swiper'
-
-const beasiswaData = [
-  {
-    id: 1,
-    nama: 'Beasiswa ABC',
-    ipk: 3.0,
-    semester: 5,
-    jurusan: ['Teknik Informatika'],
-    tipePendanaan: 1,
-    jenjang: ['S1'],
-    rangeUangSaku: [800000, 2000000],
-  },
-  {
-    id: 2,
-    nama: 'Beasiswa XYZ',
-    ipk: 3.0,
-    semester: 6,
-    jurusan: ['Teknik Sipil'],
-    tipePendanaan: 1,
-    jenjang: ['S1'],
-    rangeUangSaku: [1200000, 2500000],
-  },
-  {
-    id: 3,
-    nama: 'Beasiswa PQR',
-    ipk: 3.0,
-    semester: 7,
-    jurusan: ['Akuntansi', 'Manajemen'],
-    tipePendanaan: 2,
-    jenjang: ['S1'],
-    rangeUangSaku: [1500000, 3000000],
-  },
-  {
-    id: 4,
-    nama: 'Beasiswa MNO',
-    ipk: 3.0,
-    semester: 4,
-    jurusan: ['Ilmu Komunikasi'],
-    tipePendanaan: 1,
-    jenjang: ['S1'],
-    rangeUangSaku: [1000000, 2500000],
-  },
-  {
-    id: 5,
-    nama: 'Beasiswa DEF',
-    ipk: 3.0,
-    semester: 3,
-    jurusan: ['Teknik Industri'],
-    tipePendanaan: 2,
-    jenjang: ['S1'],
-    rangeUangSaku: [2000000, 4000000],
-  },
-  // Tambahkan data beasiswa lainnya dengan nilai yang berbeda
-]
-
-// const beasiswaData = [
-//   {
-//     id: 1,
-//     nama: 'BANK BI',
-//     ipk: 3.0,
-//     semester: 3,
-//     jurusan: ['Teknik Komputer', 'Teknik Elektro'],
-//     tipePendanaan: 0,
-//     jenjang: ['S2', 'D3'],
-//     rangeUangSaku: [500000, 1500000],
-//   },
-//   {
-//     id: 2,
-//     nama: 'DIcoding',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Teknik Informatika', 'Teknik Elektro'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   {
-//     id: 3,
-//     nama: 'Salemba Empat',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Akuntansi', 'Bahasa Inggris'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [500000, 2000000],
-//   },
-//   {
-//     id: 4,
-//     nama: 'Koridor',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Teknik Mesin', 'Teknik Elektro', 'TekniK Informatika'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [300000, 2000000],
-//   },
-//   {
-//     id: 5,
-//     nama: 'LPDP',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Akuntansi', 'Teknik Kimia'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   {
-//     id: 6,
-//     nama: 'Beasiswa A',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Teknik Elektro'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   {
-//     id: 7,
-//     nama: 'Beasiswa B',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Ilmu Komputer', 'Sistem Informasi'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   {
-//     id: 8,
-//     nama: 'Beasiswa C',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Teknik Mesin', 'Teknik Elektro'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   {
-//     id: 9,
-//     nama: 'Beasiswa D',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Teknik Mesin', 'Teknik Elektro'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   {
-//     id: 10,
-//     nama: 'Beasiswa E',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Ilmu Komputer', 'Sistem Informasi'],
-//     tipePendanaan: 0,
-//     jenjang: ['S1, D3, D4'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   {
-//     id: 11,
-//     nama: 'Beasiswa F',
-//     ipk: 3.5,
-//     semester: 4,
-//     jurusan: ['Manajemen'],
-//     tipePendanaan: 0,
-//     jenjang: ['D3, D4'],
-//     rangeUangSaku: [100000, 2000000],
-//   },
-//   // Tambahkan data beasiswa lainnya sesuai kebutuhan
-// ]
-
-function calculateCosineSimilarity(vectorA, vectorB) {
-  const matchingValues = [
-    vectorA.ipk >= vectorB.ipk,
-    vectorA.semester >= vectorB.semester,
-    Array.isArray(vectorA.jurusan) && vectorA.jurusan.includes(vectorB.jurusan),
-    vectorA.tipePendanaan === vectorB.tipePendanaan,
-    Array.isArray(vectorA.jenjang) && vectorA.jenjang.includes(vectorB.jenjang),
-    vectorA.rangeUangSaku[0] >= vectorB.rangeUangSaku[0] &&
-      vectorA.rangeUangSaku[1] <= vectorB.rangeUangSaku[1],
-  ]
-
-  const dotProduct = matchingValues.reduce(
-    (sum, value) => sum + (value ? 1 : 0),
-    0,
-  )
-  const magnitudeVectorA = Math.sqrt(matchingValues.length)
-  const magnitudeVectorB = Math.sqrt(Object.values(vectorB).length)
-
-  const cosineSimilarity =
-    dotProduct / (magnitudeVectorA * magnitudeVectorB).toFixed(3)
-
-  console.log(cosineSimilarity)
-  return cosineSimilarity
-}
+import React, { useEffect, useState } from 'react'
+import { View, Text, Button, Alert, TextInput, ScrollView } from 'react-native'
+import DropdownPicker from 'react-native-dropdown-picker'
+import { firebase } from '../../firebase'
+import { useNavigation } from '@react-navigation/native'
 
 const BeasiswaScreen = () => {
-  const [matchingBeasiswa, setMatchingBeasiswa] = useState([])
-  const [userVector, setUserVector] = useState({
-    ipk: '',
-    semester: '',
-    jurusan: '',
-    tipePendanaan: '',
-    jenjang: '',
-    rangeUangSaku: '',
-  })
+  const [namaBeasiswa, setNamaBeasiswa] = useState('')
+  const [ipkMin, setIpkMin] = useState('')
 
-  const findMatchingBeasiswa = () => {
-    const matchedBeasiswa = []
+  const navigation = useNavigation()
 
-    for (const beasiswa of beasiswaData) {
-      const cosineSimilarity = calculateCosineSimilarity(userVector, beasiswa)
+  const [openJurusan, setOpenJurusan] = useState(false)
+  const [valueJurusan, setValueJurusan] = useState(null)
+  const [jurusanItem, setJurusanItem] = useState([
+    { label: 'Teknik Informatika', value: 'teknik informatika' },
+    { label: 'Ilmu Komputer', value: 'ilmu komputer' },
+    { label: 'Teknik Elektro', value: 'teknik elektro' },
+    { label: 'Teknologi Informasi', value: 'teknologi informasi' },
+    { label: 'Teknik Telekomunikasi', value: 'teknik telekomunikasi' },
+    { label: 'Semua Jurusan', value: 'semua jurusan' },
+    { label: 'Semua ', value: 'semua ' },
+  ])
 
-      matchedBeasiswa.push({
-        beasiswa: beasiswa,
-        cosineSimilarity: cosineSimilarity,
-      })
+  const [openJenjang, setOpenJenjang] = useState(false)
+  const [valueJenjang, setValueJenjang] = useState(null)
+  const [jenjangItem, setJenjangItem] = useState([
+    { label: 'S1', value: 's1' },
+    { label: 'S2', value: 's2' },
+  ])
+
+  const [openSemester, setOpenSemester] = useState(false)
+  const [valueSemester, setValueSemester] = useState(null)
+  const [semesterItem, setSemesterItem] = useState([
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+  ])
+
+  const [openTipePendanaan, setOpenTipePendanaan] = useState(false)
+  const [valueTipePendanaan, setValueTipePendanaan] = useState(null)
+  const [tipePendanaanItem, setTipePendanaanItem] = useState([
+    { label: 'Fully Funded', value: 'fully funded' },
+    { label: 'Partial Funded', value: 'partial funded' },
+  ])
+
+  const [openRangeUangSaku, setOpenRangeUangSaku] = useState(false)
+  const [valueRangeUangSaku, setValueRangeUangSaku] = useState(null)
+  const [rangeUangSakuItem, setRangeUangSakuItem] = useState([
+    { label: '1000000-2000000', value: '1000000-2000000' },
+    { label: '4000000-5000000', value: '4000000-5000000' },
+  ])
+
+  useEffect(() => {
+    console.log(valueJenjang)
+  }, [valueJenjang])
+
+  const handleAddBeasiswa = async () => {
+    try {
+      await firebase
+        .firestore()
+        .collection('beasiswa')
+        .add({
+          nama: namaBeasiswa,
+          ipkMin: ipkMin,
+          jurusan: valueJurusan,
+          semester: valueSemester,
+          jenjang: valueJenjang,
+          tipePendanaan: valueTipePendanaan,
+          rangeUangSaku: valueRangeUangSaku,
+        })
+        .then(() => {
+          Alert.alert('Sukses', 'Berhasil Daftar')
+          setNamaBeasiswa('')
+          setIpkMin('')
+          setValueJurusan(null)
+          setValueSemester(null)
+          setValueJenjang(null)
+          setValueTipePendanaan(null)
+          setValueRangeUangSaku(null)
+        })
+      console.log('Beasiswa added successfully!')
+    } catch (error) {
+      console.error('Error adding beasiswa:', error)
     }
-
-    matchedBeasiswa.sort((a, b) => {
-      if (a.cosineSimilarity === b.cosineSimilarity) {
-        // Jika cosine similarity sama, bandingkan dengan input pengguna
-        const aMatchingValues = calculateMatchingValues(userVector, a.beasiswa)
-        const bMatchingValues = calculateMatchingValues(userVector, b.beasiswa)
-
-        const aMatchingCount = aMatchingValues.reduce(
-          (sum, value) => sum + (value ? 1 : 0),
-          0,
-        )
-        const bMatchingCount = bMatchingValues.reduce(
-          (sum, value) => sum + (value ? 1 : 0),
-          0,
-        )
-
-        return bMatchingCount - aMatchingCount // Urutkan berdasarkan jumlah kecocokan yang lebih tinggi
-      } else {
-        return b.cosineSimilarity - a.cosineSimilarity // Urutkan berdasarkan cosine similarity yang lebih tinggi
-      }
-    })
-
-    return matchedBeasiswa.slice(0, 10) // Ambil 10 beasiswa teratas
   }
 
-  function calculateMatchingValues(userVector, beasiswa) {
-    return [
-      userVector.ipk >= beasiswa.ipk,
-      userVector.semester >= beasiswa.semester,
-      Array.isArray(userVector.jurusan) &&
-        userVector.jurusan.includes(beasiswa.jurusan),
-      userVector.tipePendanaan === beasiswa.tipePendanaan,
-      Array.isArray(userVector.jenjang) &&
-        userVector.jenjang.includes(beasiswa.jenjang),
-      userVector.rangeUangSaku[0] >= beasiswa.rangeUangSaku[0] &&
-        userVector.rangeUangSaku[1] <= beasiswa.rangeUangSaku[1],
-    ]
-  }
-
-  const handleFindMatchingBeasiswa = () => {
-    const matchedBeasiswa = findMatchingBeasiswa()
-    setMatchingBeasiswa(matchedBeasiswa)
-  }
-
-  const renderCard = (card) => {
-    const beasiswa = card.beasiswa
-    const cosineSimilarity = card.cosineSimilarity
-    return (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'white',
-          height: 300,
-        }}
-      >
-        <Text>{beasiswa.nama}</Text>
-        <Text>Cosine Similarity: {cosineSimilarity}</Text>
-      </View>
-    )
-  }
-
-  const onSwipedAllCards = () => {
-    console.log('Semua beasiswa telah ditampilkan')
-  }
+  useEffect(() => {}, [])
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-        Top 10 Beasiswa:
-      </Text>
-      <TextInput
-        placeholder="IPK"
-        value={userVector.ipk}
-        onChangeText={(value) => setUserVector({ ...userVector, ipk: value })}
-      />
-      <TextInput
-        placeholder="Semester"
-        value={userVector.semester}
-        onChangeText={(value) =>
-          setUserVector({ ...userVector, semester: value })
-        }
-      />
-      <TextInput
-        placeholder="Jurusan"
-        value={userVector.jurusan}
-        onChangeText={(value) =>
-          setUserVector({ ...userVector, jurusan: value })
-        }
-      />
-      <TextInput
-        placeholder="Tipe Pendanaan"
-        value={userVector.tipePendanaan}
-        onChangeText={(value) =>
-          setUserVector({ ...userVector, tipePendanaan: value })
-        }
-      />
-      <TextInput
-        placeholder="Jenjang"
-        value={userVector.jenjang}
-        onChangeText={(value) =>
-          setUserVector({ ...userVector, jenjang: value })
-        }
-      />
-      <TextInput
-        placeholder="Range Uang Saku"
-        value={userVector.rangeUangSaku}
-        onChangeText={(value) =>
-          setUserVector({ ...userVector, rangeUangSaku: value })
-        }
-      />
-      {/* Tambahkan TextInput untuk atribut-atribut lainnya */}
-      <Button title="Submit" onPress={handleFindMatchingBeasiswa} />
-      {matchingBeasiswa.length > 0 ? (
-        <Swiper
-          cards={matchingBeasiswa}
-          renderCard={renderCard}
-          onSwipedAll={onSwipedAllCards}
-          stackSize={3}
-          stackSeparation={15}
-          cardIndex={0}
-          backgroundColor="transparent"
-          animateOverlayLabelsOpacity
-          animateCardOpacity
-          swipeBackCard
+      <View style={{ flexDirection: 'column', gap: 10, margin: 10 }}>
+        <Text>Nama</Text>
+        <TextInput
+          onChangeText={(namaBeasiswa) => setNamaBeasiswa(namaBeasiswa)}
+          placeholder="Nama Beasiswa"
+          value={namaBeasiswa}
         />
-      ) : (
-        <Text>Tidak ada beasiswa yang cocok</Text>
-      )}
+        <Text>IPK</Text>
+        <TextInput
+          onChangeText={(ipkMin) => setIpkMin(ipkMin)}
+          placeholder="Minimal IPK"
+          value={ipkMin}
+          keyboardType="numeric"
+        />
+        <Text>Jurusan</Text>
+        <DropdownPicker
+          containerStyle={{ zIndex: 5 }}
+          placeholder="Pilih Jurusan"
+          listMode="SCROLLVIEW"
+          scrollViewProps={{
+            nestedScrollEnabled: true,
+          }}
+          closeAfterSelecting={true}
+          maxHeight={200}
+          multiple={true}
+          max={7}
+          min={1}
+          items={jurusanItem}
+          value={valueJurusan}
+          open={openJurusan}
+          setOpen={setOpenJurusan}
+          setValue={setValueJurusan}
+          setItems={setJurusanItem}
+        />
+        <Text>Semester</Text>
+        <DropdownPicker
+          containerStyle={{ zIndex: 4 }}
+          placeholder="Pilih Minimal Semester"
+          items={semesterItem}
+          value={valueSemester}
+          open={openSemester}
+          setOpen={setOpenSemester}
+          setValue={setValueSemester}
+          setItems={setSemesterItem}
+        />
+        <Text>Jenjang</Text>
+        <DropdownPicker
+          containerStyle={{ zIndex: 3 }}
+          multiple={true}
+          max={7}
+          min={1}
+          placeholder="Pilih Jenjang"
+          items={jenjangItem}
+          value={valueJenjang}
+          open={openJenjang}
+          setOpen={setOpenJenjang}
+          setValue={setValueJenjang}
+          setItems={setJenjangItem}
+        />
+        <Text>Tipe Pendanaan</Text>
+        <DropdownPicker
+          containerStyle={{ zIndex: 2 }}
+          placeholder="Pilih Tipe Pendanaan"
+          items={tipePendanaanItem}
+          value={valueTipePendanaan}
+          open={openTipePendanaan}
+          setOpen={setOpenTipePendanaan}
+          setValue={setValueTipePendanaan}
+          setItems={setTipePendanaanItem}
+        />
+        <Text>Range Uang Saku</Text>
+        <DropdownPicker
+          containerStyle={{ zIndex: 1 }}
+          placeholder="Pilih Range Uang Saku"
+          items={rangeUangSakuItem}
+          value={valueRangeUangSaku}
+          open={openRangeUangSaku}
+          setOpen={setOpenRangeUangSaku}
+          setValue={setValueRangeUangSaku}
+          setItems={setRangeUangSakuItem}
+        />
+
+        <Button title="Submit" onPress={handleAddBeasiswa} />
+        <Button
+          title="percobaan"
+          onPress={() => {
+            navigation.navigate('Percobaan')
+          }}
+        />
+      </View>
     </View>
   )
 }

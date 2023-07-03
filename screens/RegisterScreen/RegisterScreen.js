@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     registerContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 30
+        gap: -100
     },
 
     registerText: {
@@ -97,5 +97,21 @@ export const styles = StyleSheet.create({
     textLinkLogin: {
         color: 'blue',
         fontSize: 15
-    }
+    },
+    imagepreviewcontainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: 200,
+        backgroundColor: '#f0cced',
+        marginVertical: 8,
+        borderRadius: 8,
+      },
+      previewText: {
+        color: '#592454',
+      },
+      imageStyle: {
+        width: '100%',
+        height: '100%',
+      },
 })
