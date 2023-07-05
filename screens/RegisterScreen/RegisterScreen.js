@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     registerContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        gap: -100
+        gap: 20
     },
 
     registerText: {
@@ -113,5 +113,46 @@ export const styles = StyleSheet.create({
       imageStyle: {
         width: '100%',
         height: '100%',
+      },
+      textHeader: {
+        fontSize: 36,
+        marginVertical: 60,
+        color: "#111",
+      },
+      textSubHeader: {
+        fontSize: 25,
+        color: "#111",
+      },
+      inputBtn: {
+        paddingVertical: 7,
+        paddingHorizontal: 10,
+        backgroundColor: '#f8faf9',
+        borderRadius: 10,
+        width: 320,
+        height: 60,
+        flexDirection: 'column',
+        justifyContent: 'center'
+      },
+      centeredView: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "#080516",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 20,
+        padding: 35,
+        width: "90%",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
       },
 })

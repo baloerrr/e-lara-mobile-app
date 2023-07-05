@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { View, TextInput, Button, Text } from 'react-native'
+import { View, TextInput, Text, TouchableOpacity, Image } from 'react-native'
 import {
   calculateCosineSimilarity,
   calculateMatchingValues,
 } from '../../lib/index'
 import Swiper from 'react-native-deck-swiper'
 import { firebase } from '../../firebase'
-import { useNavigation } from '@react-navigation/native'
+import DropDownPicker from 'react-native-dropdown-picker'
+import HeaderComponent from '../../components/Header/HeaderComponent'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const FormMatching = () => {
   const [matchingBeasiswa, setMatchingBeasiswa] = useState([])
@@ -19,6 +21,21 @@ const FormMatching = () => {
     jenjang: '',
     rangeUangSaku: '',
   })
+
+  const [openJurusan, setOpenJurusan] = useState(false)
+  const [valueJurusan, setValueJurusan] = useState(null)
+
+  const [openJenjang, setOpenJenjang] = useState(false)
+  const [valueJenjang, setValueJenjang] = useState(null)
+
+  const [openSemester, setOpenSemester] = useState(false)
+  const [valueSemester, setValueSemester] = useState(null)
+
+  const [openTipePendanaan, setOpenTipePendanaan] = useState(false)
+  const [valueTipePendanaan, setValueTipePendanaan] = useState(null)
+
+  const [openRangeUangSaku, setOpenRangeUangSaku] = useState(false)
+  const [valueRangeUangSaku, setValueRangeUangSaku] = useState(null)
 
   useEffect(() => {
     const fetchBeasiswa = async () => {
@@ -38,20 +55,16 @@ const FormMatching = () => {
   }, [])
 
   const findMatchingBeasiswa = () => {
-    const matchedBeasiswa = []
+    let matchedBeasiswa = []
 
     for (const beasiswa of matchingBeasiswa) {
       const cosineSimilarity = calculateCosineSimilarity(userVector, beasiswa)
 
-      matchedBeasiswa.push({
-        beasiswa: beasiswa,
-        cosineSimilarity: cosineSimilarity,
-      })
+      matchedBeasiswa.push({ beasiswa: beasiswa })
     }
 
     matchedBeasiswa.sort((a, b) => {
       if (a.cosineSimilarity === b.cosineSimilarity) {
-        // Jika cosine similarity sama, bandingkan dengan input pengguna
         const aMatchingValues =
           calculateMatchingValues(userVector, a.beasiswa) || []
         const bMatchingValues =
@@ -66,91 +79,63 @@ const FormMatching = () => {
           0,
         )
 
-        return bMatchingCount - aMatchingCount // Urutkan berdasarkan jumlah kecocokan yang lebih tinggi
+        return bMatchingCount - aMatchingCount
       } else {
-        return b.cosineSimilarity - a.cosineSimilarity // Urutkan berdasarkan cosine similarity yang lebih tinggi
+        return b.cosineSimilarity - a.cosineSimilarity
       }
     })
 
-    return matchedBeasiswa.slice(0, 10) // Ambil 10 beasiswa teratas
+    const top10Beasiswa = matchedBeasiswa.slice(0, 9)
+
+    // try {
+    //   await AsyncStorage.setItem(
+    //     'matchedBeasiswa',
+    //     JSON.stringify(top10Beasiswa),
+    //   )
+    // } catch (error) {
+    //   console.log(error.message)
+    // }
+
+    top10Beasiswa.map((data) => {
+      console.log(data)
+    })
+
+    return top10Beasiswa
   }
 
   const handleFindMatchingBeasiswa = () => {
     const matchedBeasiswa = findMatchingBeasiswa()
-    console.log(matchedBeasiswa)
     setMatchingBeasiswa(matchedBeasiswa)
     setIsConfirmed(true)
   }
 
   const renderCard = (card) => {
-    const beasiswa = card
-    const cosineSimilarity = card.cosineSimilarity
-
-    if (!beasiswa.beasiswa.nama) {
-      return (
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-            Top 10 Beasiswa:
-          </Text>
-          <TextInput
-            placeholder="IPK"
-            value={userVector.ipk}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, ipk: value })
-            }
-          />
-          <TextInput
-            placeholder="Semester"
-            value={userVector.semester}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, semester: value })
-            }
-          />
-          <TextInput
-            placeholder="Jurusan"
-            value={userVector.jurusan}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, jurusan: value })
-            }
-          />
-          <TextInput
-            placeholder="Tipe Pendanaan"
-            value={userVector.tipePendanaan}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, tipePendanaan: value })
-            }
-          />
-          <TextInput
-            placeholder="Jenjang"
-            value={userVector.jenjang}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, jenjang: value })
-            }
-          />
-          <TextInput
-            placeholder="Range Uang Saku"
-            value={userVector.rangeUangSaku}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, rangeUangSaku: value })
-            }
-          />
-          {/* Tambahkan TextInput untuk atribut-atribut lainnya */}
-          <Button title="Submit" onPress={handleFindMatchingBeasiswa} />
-        </View>
-      ) // Jika objek beasiswa tidak memiliki properti 'nama', maka tampilkan null
-    }
+    const beasiswa = card.beasiswa
 
     return (
       <View
+        key={beasiswa.id}
         style={{
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'white',
-          height: 300,
+          height: 420,
+          position: 'relative',
+          borderRadius: 20,
         }}
       >
-        <Text>{beasiswa.beasiswa.nama}</Text>
-        {/* <Text>Cosine Similarity: {cosineSimilarity}</Text> */}
+        <Image
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            borderRadius: 20,
+          }}
+          resizeMode="contain"
+          source={{ uri: beasiswa.gambar }}
+        />
+        {/* <Text>{beasiswa.beasiswa.nama}</Text>
+        <Text>Cosine Similarity: {cosineSimilarity}</Text> */}
       </View>
     )
   }
@@ -162,67 +147,200 @@ const FormMatching = () => {
   return (
     <View style={{ flex: 1 }}>
       {isConfirmed && matchingBeasiswa.length > 0 ? (
-        <Swiper
-          cards={matchingBeasiswa}
-          renderCard={renderCard}
-          onSwipedAll={onSwipedAllCards}
-          stackSize={3}
-          stackSeparation={15}
-          cardIndex={0}
-          backgroundColor="transparent"
-          animateOverlayLabelsOpacity
-          animateCardOpacity
-          swipeBackCard
-        />
-      ) : (
         <View>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-            Top 10 Beasiswa:
-          </Text>
-          <TextInput
-            placeholder="IPK"
-            value={userVector.ipk}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, ipk: value })
-            }
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginBottom: 20,
+            }}
+          >
+            <HeaderComponent />
+          </View>
+          <Swiper
+            cards={matchingBeasiswa}
+            renderCard={renderCard}
+            onSwipedAll={onSwipedAllCards}
+            stackSize={3}
+            stackSeparation={15}
+            cardIndex={0}
+            backgroundColor="transparent"
+            animateOverlayLabelsOpacity
+            animateCardOpacity
+            swipeBackCard
           />
-          <TextInput
-            placeholder="Semester"
-            value={userVector.semester}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, semester: value })
-            }
-          />
-          <TextInput
-            placeholder="Jurusan"
-            value={userVector.jurusan}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, jurusan: value })
-            }
-          />
-          <TextInput
-            placeholder="Tipe Pendanaan"
-            value={userVector.tipePendanaan}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, tipePendanaan: value })
-            }
-          />
-          <TextInput
-            placeholder="Jenjang"
-            value={userVector.jenjang}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, jenjang: value })
-            }
-          />
-          <TextInput
-            placeholder="Range Uang Saku"
-            value={userVector.rangeUangSaku}
-            onChangeText={(value) =>
-              setUserVector({ ...userVector, rangeUangSaku: value })
-            }
-          />
-          {/* Tambahkan TextInput untuk atribut-atribut lainnya */}
-          <Button title="Submit" onPress={handleFindMatchingBeasiswa} />
+        </View>
+      ) : (
+        <View style={{ flexDirection: 'column', gap: 20 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginBottom: 20,
+            }}
+          >
+            <HeaderComponent />
+          </View>
+          <View
+            style={{
+              backgroundColor: 'white',
+              padding: 20,
+              marginHorizontal: 20,
+              borderRadius: 15,
+              flexDirection: 'column',
+              gap: 20,
+            }}
+          >
+            <Text
+              style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}
+            >
+              Form Matching
+            </Text>
+            <TextInput
+              placeholder="Masukkan IPK anda"
+              style={{
+                paddingVertical: 7,
+                paddingHorizontal: 10,
+                backgroundColor: '#f8faf9',
+                borderRadius: 10,
+                width: 315,
+                height: 50,
+              }}
+              value={userVector.ipk}
+              onChangeText={(value) =>
+                setUserVector({ ...userVector, ipk: value })
+              }
+            />
+
+            <DropDownPicker
+              containerStyle={{ zIndex: 5 }}
+              placeholder="Pilih Minimal Semester"
+              placeholderStyle={{ color: 'grey' }}
+              items={[
+                { label: '1', value: '1' },
+                { label: '2', value: '2' },
+                { label: '3', value: '3' },
+                { label: '4', value: '4' },
+                { label: '5', value: '5' },
+                { label: '6', value: '6' },
+                { label: '7', value: '7' },
+                { label: '8', value: '8' },
+              ]}
+              open={openSemester}
+              setOpen={setOpenSemester}
+              onSelectItem={(item) =>
+                setUserVector({ ...userVector, semester: item.value })
+              }
+              value={valueSemester}
+              setValue={setValueSemester}
+            />
+
+            <DropDownPicker
+              containerStyle={{ zIndex: 4 }}
+              placeholder="Pilih Jurusan"
+              placeholderStyle={{ color: 'grey' }}
+              items={[
+                { label: 'Teknik Informatika', value: 'teknik informatika' },
+                { label: 'Ilmu Komputer', value: 'ilmu komputer' },
+                { label: 'Teknik Elektro', value: 'teknik elektro' },
+                { label: 'Teknologi Informasi', value: 'teknologi informasi' },
+                {
+                  label: 'Teknik Telekomunikasi',
+                  value: 'teknik telekomunikasi',
+                },
+                { label: 'Semua Jurusan', value: 'semua jurusan' },
+              ]}
+              open={openJurusan}
+              setOpen={setOpenJurusan}
+              value={valueJurusan}
+              setValue={setValueJurusan}
+              onSelectItem={(item) =>
+                setUserVector({ ...userVector, jurusan: item.value })
+              }
+            />
+
+            <DropDownPicker
+              containerStyle={{ zIndex: 3 }}
+              placeholder="Pilih Tipe Pendanaan"
+              placeholderStyle={{ color: 'grey' }}
+              items={[
+                { label: 'Fully Funded', value: 'fully funded' },
+                { label: 'Partial Funded', value: 'partial funded' },
+              ]}
+              open={openTipePendanaan}
+              setOpen={setOpenTipePendanaan}
+              value={valueTipePendanaan}
+              setValue={setValueTipePendanaan}
+              onSelectItem={(item) =>
+                setUserVector({ ...userVector, tipePendanaan: item.value })
+              }
+            />
+
+            <DropDownPicker
+              containerStyle={{ zIndex: 2 }}
+              placeholder="Pilih Jenjang"
+              placeholderStyle={{ color: 'grey' }}
+              items={[
+                { label: 'S1', value: 's1' },
+                { label: 'S2', value: 's2' },
+                { label: 'D3', value: 'd3' },
+                { label: 'D4', value: 'd4' },
+              ]}
+              open={openJenjang}
+              setOpen={setOpenJenjang}
+              value={valueJenjang}
+              setValue={setValueJenjang}
+              onSelectItem={(item) =>
+                setUserVector({ ...userVector, jenjang: item.value })
+              }
+            />
+
+            <DropDownPicker
+              containerStyle={{ zIndex: 1 }}
+              placeholder="Pilih range uang saku"
+              placeholderStyle={{ color: 'grey' }}
+              items={[
+                { label: '1.000.000-2.000.000', value: '1000000-2000000' },
+                { label: '4.000.000-5.000.000', value: '4000000-5000000' },
+              ]}
+              open={openRangeUangSaku}
+              setOpen={setOpenRangeUangSaku}
+              value={valueRangeUangSaku}
+              setValue={setValueRangeUangSaku}
+              onSelectItem={(item) =>
+                setUserVector({ ...userVector, rangeUangSaku: item.value })
+              }
+            />
+            {/* Tambahkan TextInput untuk atribut-atribut lainnya */}
+            <TouchableOpacity
+              style={{
+                paddingVertical: 7,
+                paddingHorizontal: 72,
+                borderRadius: 4,
+                elevation: 3,
+                backgroundColor: 'orange',
+                borderRadius: 10,
+                width: 315,
+                height: 55,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={handleFindMatchingBeasiswa}
+            >
+              <Text
+                style={{
+                  fontSize: 17,
+                  lineHeight: 21,
+                  fontWeight: 'bold',
+                  letterSpacing: 0.25,
+                  color: 'white',
+                }}
+              >
+                Konfirmasi
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </View>
@@ -230,5 +348,3 @@ const FormMatching = () => {
 }
 
 export default FormMatching
-
-// menggunakan library react-native-deck-swipet

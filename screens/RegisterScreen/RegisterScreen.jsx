@@ -1,13 +1,12 @@
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
   Pressable,
   Image,
-  Button,
   ScrollView,
+  Modal,
 } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { styles } from './RegisterScreen'
@@ -19,17 +18,18 @@ import ModalAlert from '../../components/Modal/ModalAlert'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { AuthContext } from '../../hooks/AuthProvider'
 import useUploadImage from '../../hooks/useUploadImage'
-import { useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker'
+import DatePicker from 'react-native-modern-datepicker'
+import { getFormatedDate } from 'react-native-modern-datepicker'
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [namaLengkap, setNamaLengkap] = useState('')
   const [tempatLahir, setTempatLahir] = useState('')
-  const [tanggalLahir, setTanggalLahir] = useState('')
+  const [tanggalLahir, setTanggalLahir] = useState(new Date())
   const [noHandphone, setNoHandphone] = useState('')
-  const [imageUri, setImageUri] = useState(null)
+  // const [imageUri, setImageUri] = useState(null)
 
   const [message, setMessage] = useState('')
 
@@ -37,24 +37,41 @@ const RegisterScreen = () => {
 
   const { register, isLoading } = useContext(AuthContext)
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+  const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
+  const today = new Date()
+  const startDate = getFormatedDate(
+    today.setDate(today.getDate() + 1),
+    'YYYY/MM/DD',
+  )
+  const [selectedStartDate, setSelectedStartDate] = useState('')
+  const [startedDate, setStartedDate] = useState('12/12/2023')
 
-    if (status !== 'granted') {
-      console.log('Permission Denied')
-      return
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    })
-    const source = result.assets[0].uri
-
-    setImageUri(source)
+  function handleChangeStartDate(propDate) {
+    setStartedDate(propDate)
   }
+
+  const handleOnPressStartDate = () => {
+    setOpenStartDatePicker(!openStartDatePicker)
+  }
+
+  // const pickImage = async () => {
+  //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+
+  //   if (status !== 'granted') {
+  //     console.log('Permission Denied')
+  //     return
+  //   }
+
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   })
+  //   const source = result.assets[0].uri
+
+  //   setImageUri(source)
+  // }
 
   const handleRegister = async () => {
     const registerData = {
@@ -64,7 +81,6 @@ const RegisterScreen = () => {
       tempatLahir,
       tanggalLahir,
       noHandphone,
-      imageUri,
     }
 
     try {
@@ -75,15 +91,10 @@ const RegisterScreen = () => {
       setTempatLahir('')
       setTanggalLahir('')
       setNoHandphone('')
-      setImageUri(null)
     } catch (error) {
       console.log(error.message)
     }
   }
-
-  useEffect(() => {
-    console.log(imageUri)
-  }, [imageUri])
 
   return (
     <ScrollView>
@@ -147,12 +158,20 @@ const RegisterScreen = () => {
             </View>
             <View style={styles.formControl}>
               {/* <Text>Tanggal Lahir</Text> */}
-              <Input
-                onChangeText={(tanggalLahir) => setTanggalLahir(tanggalLahir)}
-                style={styles.input}
-                placeholder="Tanggal Lahir"
-                value={tanggalLahir}
-              />
+              <View>
+                <TouchableOpacity
+                  style={styles.inputBtn}
+                  onPress={handleOnPressStartDate}
+                >
+                  <Text
+                    style={
+                      selectedStartDate ? { color: 'black' } : { color: 'grey' }
+                    }
+                  >
+                    {selectedStartDate ? selectedStartDate : 'Tanggal lahir'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
             <View style={styles.formControl}>
               {/* <Text>No Handphone</Text> */}
@@ -161,10 +180,7 @@ const RegisterScreen = () => {
                 defaultValue={noHandphone}
               />
             </View>
-            <View>
-              {/* <View style={styles.imagepreviewcontainer}>{imagePreview}</View> */}
-              <Button title="Take Image" onPress={pickImage} />
-            </View>
+            <View></View>
             <View>
               <TouchableOpacity
                 onPress={handleRegister}
@@ -190,6 +206,37 @@ const RegisterScreen = () => {
           </View>
           {message ? <ModalAlert /> : ''}
         </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={openStartDatePicker}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <DatePicker
+                mode="calendar"
+                minimumDate={startDate}
+                selected={startedDate}
+                onDateChanged={handleChangeStartDate}
+                onSelectedChange={(date) => setSelectedStartDate(date)}
+                options={{
+                  backgroundColor: '#080516',
+                  textHeaderColor: '#469ab6',
+                  textDefaultColor: '#FFFFFF',
+                  selectedTextColor: '#FFF',
+                  mainColor: '#469ab6',
+                  textSecondaryColor: '#FFFFFF',
+                  borderColor: 'rgba(122, 146, 165, 0.1)',
+                }}
+              />
+
+              <TouchableOpacity onPress={handleOnPressStartDate}>
+                <Text style={{ color: 'white' }}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </KeyboardAwareScrollView>
     </ScrollView>
   )

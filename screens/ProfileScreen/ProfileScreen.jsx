@@ -27,6 +27,8 @@ const BeasiswaScreen = () => {
   const [jenjangItem, setJenjangItem] = useState([
     { label: 'S1', value: 's1' },
     { label: 'S2', value: 's2' },
+    { label: 'D3', value: 'd3' },
+    { label: 'D4', value: 'd4' },
   ])
 
   const [openSemester, setOpenSemester] = useState(false)
@@ -34,6 +36,12 @@ const BeasiswaScreen = () => {
   const [semesterItem, setSemesterItem] = useState([
     { label: '1', value: '1' },
     { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
+    { label: '6', value: '6' },
+    { label: '7', value: '7' },
+    { label: '8', value: '8' },
   ])
 
   const [openTipePendanaan, setOpenTipePendanaan] = useState(false)
@@ -46,8 +54,9 @@ const BeasiswaScreen = () => {
   const [openRangeUangSaku, setOpenRangeUangSaku] = useState(false)
   const [valueRangeUangSaku, setValueRangeUangSaku] = useState(null)
   const [rangeUangSakuItem, setRangeUangSakuItem] = useState([
-    { label: '1000000-2000000', value: '1000000-2000000' },
-    { label: '4000000-5000000', value: '4000000-5000000' },
+    { label: '1.000.000-2.000.000', value: '1000000-2000000' },
+    { label: '3.000.000-4.000.000', value: '3000000-4000000' },
+    { label: '4.000,000-5000000', value: '4000000-5000000' },
   ])
 
   useEffect(() => {

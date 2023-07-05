@@ -30,7 +30,7 @@ const AuthProvider = ({children}) => {
     }, [response, token])
 
     const register = async (registerData) => {
-      const { email, password, namaLengkap, tempatLahir, tanggalLahir, noHandphone, imageUri} = registerData;
+      const { email, password, namaLengkap, tempatLahir, tanggalLahir, noHandphone} = registerData;
   
       setIsLoading(true);
   
@@ -39,14 +39,14 @@ const AuthProvider = ({children}) => {
         const timestamps = firebase.firestore.FieldValue.serverTimestamp()
         const user = authResult.user;
 
-        const response = await fetch(imageUri)
-        const blob = await response.blob()
+        // const response = await fetch(imageUri)
+        // const blob = await response.blob()
 
-        // const filename = imageUri.substring(imageUri.lastIndexOf('/')+1)
-        const storageRef = firebase.storage().ref().child(`user_images/${user.uid}`)
+        // // const filename = imageUri.substring(imageUri.lastIndexOf('/')+1)
+        // const storageRef = firebase.storage().ref().child(`user_images/${user.uid}`)
     
-        await storageRef.put(blob)
-        const downloadUrl = await storageRef.getDownloadURL()
+        // await storageRef.put(blob)
+        // const downloadUrl = await storageRef.getDownloadURL()
   
         await user.sendEmailVerification({
           handleCodeInApp: true,
@@ -60,7 +60,7 @@ const AuthProvider = ({children}) => {
           tempatLahir,
           tanggalLahir,
           noHandphone,
-          gambarUrl: downloadUrl,
+          // gambarUrl: downloadUrl,
           createdAt: timestamps 
         });
   
