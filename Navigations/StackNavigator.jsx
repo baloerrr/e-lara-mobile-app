@@ -9,6 +9,7 @@ import ProfileScreen from '../screens/ProfileScreen/ProfileScreen.jsx'
 import { AuthContext } from '../hooks/AuthProvider'
 import BottomNavigationBar from './BottomNavigationBar.jsx'
 import CobaanScreen from '../screens/CobaanScreen/CobaanScreen.jsx'
+import ResetPasswordScreen from '../screens/ResetPasswordScreen/ResetPasswordScreen.jsx'
 
 const Stack = createNativeStackNavigator()
 
@@ -73,6 +74,13 @@ const StackNavigator = () => {
           <Stack.Screen
             name="Register"
             component={RegisterScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ResetPassword"
+            component={ResetPasswordScreen}
             options={{
               headerShown: false,
             }}

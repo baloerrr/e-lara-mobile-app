@@ -5,8 +5,8 @@ import {
   ActivityIndicator,
   Pressable,
   Image,
-  ScrollView,
   Modal,
+  ImageBackground,
 } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { styles } from './RegisterScreen'
@@ -54,25 +54,6 @@ const RegisterScreen = () => {
     setOpenStartDatePicker(!openStartDatePicker)
   }
 
-  // const pickImage = async () => {
-  //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
-
-  //   if (status !== 'granted') {
-  //     console.log('Permission Denied')
-  //     return
-  //   }
-
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   })
-  //   const source = result.assets[0].uri
-
-  //   setImageUri(source)
-  // }
-
   const handleRegister = async () => {
     const registerData = {
       email,
@@ -97,25 +78,16 @@ const RegisterScreen = () => {
   }
 
   return (
-    <ScrollView>
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+    >
+      <ImageBackground
+        source={require('../../assets/E-Lara/register_background.png')}
+        style={styles.container}
       >
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.logoText}>E-LARA</Text>
-          </View>
-          <View>
-            <Image
-              source={require('../../assets/E-Lara/logo.png')}
-              resizeMode="cover"
-              style={styles.elaraLogo}
-            />
-          </View>
-        </View>
         <View style={styles.registerContainer}>
-          <View>
+          <View style={styles.titleContainer}>
             <Text style={styles.registerText}>Daftar Akun</Text>
           </View>
           <View style={styles.formContainer}>
@@ -178,23 +150,24 @@ const RegisterScreen = () => {
               <InputPhone
                 onChangeText={(noHandphone) => setNoHandphone(noHandphone)}
                 defaultValue={noHandphone}
+                containerStyle={{ borderRadius: 10, paddingHorizontal: 10 }}
               />
             </View>
             <View></View>
             <View>
               <TouchableOpacity
                 onPress={handleRegister}
-                style={styles.buttonBlack}
+                style={styles.buttonBlue}
               >
                 {isLoading ? (
                   <ActivityIndicator size="large" color="white" />
                 ) : (
-                  <Text style={styles.textButtonBlack}>DAFTAR</Text>
+                  <Text style={styles.textButtonBlue}>Daftar</Text>
                 )}
               </TouchableOpacity>
             </View>
             <View style={styles.loginLink}>
-              <Text style={styles.loginText}>Belum memiliki akun?</Text>
+              <Text style={styles.loginText}>Sudah memiliki akun?</Text>
               <Pressable
                 onPress={() => {
                   navigation.navigate('Login')
@@ -237,8 +210,8 @@ const RegisterScreen = () => {
             </View>
           </View>
         </Modal>
-      </KeyboardAwareScrollView>
-    </ScrollView>
+      </ImageBackground>
+    </KeyboardAwareScrollView>
   )
 }
 

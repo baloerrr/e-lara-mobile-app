@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  ImageBackground,
 } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { styles } from '../LoginScreen/LoginScreen'
@@ -30,74 +31,61 @@ const LoginScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ImageBackground
+        source={require('../../assets/E-Lara/login_background.png')}
         style={styles.container}
       >
-        <View style={styles.headerContainer}>
-          <HeaderBack />
-        </View>
         <View style={styles.imageContainer}>
-          <Image
-            source={require('../../assets/E-Lara/landingImage.png')}
-            resizeMode="cover"
-            style={{
-              width: 400,
-              height: 310,
-            }}
-          />
-        </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>
-            Wujudkan <Text style={styles.textOrange}>Impian Pendidikanmu</Text>
-            {'\n'} Bersama Kami
-          </Text>
-          <Text style={styles.spanTitle}>
-            Ikuti kami untuk menemukan Beasiswa Impianmu
-          </Text>
+          <Image source={require('../../assets/E-Lara/logo2.png')} />
+          <Text style={styles.textMasuk}>Masuk</Text>
         </View>
         <View style={styles.formContainer}>
-          <View>
-            <Input
-              onChangeText={(email) => setEmail(email)}
-              style={styles.input}
-              placeholder="Email"
-              value={email}
-            />
+          <View style={styles.inputContainer}>
+            <View>
+              <Input
+                onChangeText={(email) => setEmail(email)}
+                style={styles.input}
+                placeholder="Email"
+                value={email}
+              />
+            </View>
+            <View>
+              <Input
+                onChangeText={(password) => setPassword(password)}
+                style={styles.input}
+                placeholder="Password"
+                value={password}
+                secureTextEntry={true}
+              />
+            </View>
           </View>
-          <View>
-            <Input
-              onChangeText={(password) => setPassword(password)}
-              style={styles.input}
-              placeholder="Password"
-              value={password}
-              secureTextEntry={true}
-            />
-          </View>
-          <View>
-            <TouchableOpacity onPress={handleLogin} style={styles.buttonBlack}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handleLogin} style={styles.buttonBlue}>
               {isLoading ? (
                 <ActivityIndicator size="large" color="white" />
               ) : (
-                <Text style={styles.textButtonBlack}>MASUK</Text>
+                <Text style={styles.textButtonBlue}>Masuk</Text>
               )}
             </TouchableOpacity>
-          </View>
-          <View style={styles.registerLink}>
-            <Text style={styles.registerText}>Belum memiliki akun?</Text>
-            <Pressable
-              onPress={() => {
-                navigation.navigate('Register')
-              }}
-            >
-              <Text style={styles.textLinkRegister}>daftar</Text>
-            </Pressable>
+            <View style={styles.registerLink}>
+              <Text style={styles.registerText}>Belum memiliki akun?</Text>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('Register')
+                }}
+              >
+                <Text style={styles.textLinkRegister}>daftar</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
-        {message ? <ModalAlert /> : ''}
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </ImageBackground>
+      {message ? <ModalAlert /> : ''}
+    </KeyboardAvoidingView>
   )
 }
 

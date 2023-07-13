@@ -7,6 +7,7 @@ const InputPhone = (props) => {
       defaultValue={props.defaultValue}
       placeholder={props.placeholder}
       onChangeText={props.onChangeText}
+      containerStyle={props.containerStyle}
     />
   )
 }

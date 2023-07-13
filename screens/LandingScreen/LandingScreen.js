@@ -1,143 +1,130 @@
-import {StyleSheet, Dimensions} from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
 const height = Dimensions.get('window').height
 const width = Dimensions.get('window').width
 
 export const styles = StyleSheet.create({
-    container: {
-      width: width,
-      height: height,
-      backgroundColor: 'white',
-      alignItems: 'center',
-      flexDirection: 'column',
-      justifyContent: 'center',
-    },
+  container: {
+    width: width,
+    height: height,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    gap: 30
+  },
 
-    imageContainer: {
-      position: 'relative'
-    },
+  imageContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingTop:50
+  },
 
-    titleContainer: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      marginTop: 30
-    },
-    title: {
-      fontWeight: 'bold',
-      fontSize: 30,
-      textAlign: 'center',
-    },
-    spanTitle: {
-      textAlign: 'center',
-      fontWeight: '400',
-      fontSize: 11.7,
-    },
-    textOrange: {
-      color: 'orange',
-    },
-    buttonContainer: {
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: 15,
-      marginTop: 20,
-    },
-  
-    buttonBlack: {
-      paddingVertical: 6,
-      paddingHorizontal: 19,
-      borderRadius: 4,
-      elevation: 3,
-      backgroundColor: 'black',
-      borderRadius: 10,
-    },
-  
-    buttonBlue: {
-      paddingVertical: 6,
-      paddingHorizontal: 19,
-      borderRadius: 4,
-      elevation: 3,
-      backgroundColor: '#1976d3',
-      borderRadius: 10,
-    },
-  
-    buttonGray: {
-      paddingVertical: 6,
-      paddingHorizontal: 19,
-      borderRadius: 4,
-      elevation: 3,
-      backgroundColor: '#d9d9d9',
-      borderRadius: 10,
-    },
-  
-    textButtonBlack: {
-      fontSize: 15,
-      lineHeight: 21,
-      fontWeight: 'bold',
-      letterSpacing: 0.25,
-      color: 'white',
-    },
-    textButtonBlue: {
-      fontSize: 15,
-      lineHeight: 21,
-      fontWeight: 'bold',
-      letterSpacing: 0.25,
-      color: 'white',
-    },
-    textButtonGray: {
-      fontSize: 15,
-      lineHeight: 21,
-      fontWeight: 'bold',
-      letterSpacing: 0.25,
-      color: 'black',
-    },
+  titleContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    textAlign: 'center',
+    paddingTop:20,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    letterSpacing: 0,
+    textAlign: 'center',
+    lineHeight: 30,
+    fontFamily: 'Modernist-Bold'
+  },
+  textBlue: {
+    color: '#6E77EE',
+    textAlign: 'center'
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 15,
+    paddingTop:40
+  },
 
-    elaraContainer: {
-      flexDirection: 'row',
-      gap: 10,
-      width: 250,
-      height: 40,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+  buttonBlue: {
+    width: 295,
+    height: 50,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: '#6E77EE',
+    borderRadius: 15,
+  },
 
-    facebookContainer: {
-      flexDirection: 'row',
-      gap: 10,
-      width: 250,
-      height: 40,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+  buttonTransparent: {
+    backgroundColor: '#E4E4E4',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#6E77EE',
+  },
 
-    buttonBlackImage: {
-      width: 26,
-      height: 26
-    },
+  textButtonBlue: {
+    fontSize: 20,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  textButtonTransparent: {
+    fontSize: 20,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: '#6E77EE',
+    textAlign: 'center',
+  },
 
-    facebookImage: {
-      height: 25,
-      width: 25,
-    },
+  elaraContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    width: 295,
+  },
 
-    googleContainer: {
-      flexDirection: 'row', 
-      gap: 10, 
-      width: 250,
-      height: 40,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
+  separatorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop:70
+  },
 
-    googleImage: {
-      height: 25,
-      width: 25,
-    },
+  lineHorizontal: {
+    height: 1,
+    width: 200,
+    marginHorizontal: 30,
+    backgroundColor: 'grey',
+  },
 
-    loginLink: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 15
-    }
+  separatorText: {
+    width: 50,
+    textAlign: 'center',
+    fontSize: 14
+  },
 
-  })
-  
+  socialButtonContainer: {
+    flexDirection: 'row',
+    gap: 28,
+    paddingTop:20
+  },
+
+  socialButton: {
+    width: 65,
+    height: 65,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    borderWidth:1,
+    borderColor: '#6E77EE'
+  },
+
+  socialImage: {
+    height: 32,
+    width: 32,
+  },
+})

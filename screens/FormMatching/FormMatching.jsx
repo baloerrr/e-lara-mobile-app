@@ -8,10 +8,18 @@ import Swiper from 'react-native-deck-swiper'
 import { firebase } from '../../firebase'
 import DropDownPicker from 'react-native-dropdown-picker'
 import HeaderComponent from '../../components/Header/HeaderComponent'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import {
+  jenjangItems,
+  jurusanItems,
+  rangeUangSakuItems,
+  semesterItems,
+  tipePendanaanItems,
+} from '../../constants/DropdownItems'
+import useDropdownState from '../../hooks/useDropdownState'
 
 const FormMatching = () => {
   const [matchingBeasiswa, setMatchingBeasiswa] = useState([])
+  const [allBeasiswa, setAllBeasiswa] = useState([])
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [userVector, setUserVector] = useState({
     ipk: '',
@@ -21,21 +29,13 @@ const FormMatching = () => {
     jenjang: '',
     rangeUangSaku: '',
   })
-
-  const [openJurusan, setOpenJurusan] = useState(false)
-  const [valueJurusan, setValueJurusan] = useState(null)
-
-  const [openJenjang, setOpenJenjang] = useState(false)
-  const [valueJenjang, setValueJenjang] = useState(null)
-
-  const [openSemester, setOpenSemester] = useState(false)
-  const [valueSemester, setValueSemester] = useState(null)
-
-  const [openTipePendanaan, setOpenTipePendanaan] = useState(false)
-  const [valueTipePendanaan, setValueTipePendanaan] = useState(null)
-
-  const [openRangeUangSaku, setOpenRangeUangSaku] = useState(false)
-  const [valueRangeUangSaku, setValueRangeUangSaku] = useState(null)
+  const {
+    jenjangState,
+    jurusanState,
+    rangeUangSakuState,
+    semesterState,
+    tipePendanaanState,
+  } = useDropdownState()
 
   useEffect(() => {
     const fetchBeasiswa = async () => {
@@ -45,6 +45,7 @@ const FormMatching = () => {
           .collection('beasiswa')
           .get()
         const beasiswaData = beasiswaSnapshot.docs.map((doc) => doc.data())
+        setAllBeasiswa(beasiswaData)
         setMatchingBeasiswa(beasiswaData)
       } catch (error) {
         console.log(error.message)
@@ -60,45 +61,35 @@ const FormMatching = () => {
     for (const beasiswa of matchingBeasiswa) {
       const cosineSimilarity = calculateCosineSimilarity(userVector, beasiswa)
 
-      matchedBeasiswa.push({ beasiswa: beasiswa })
+      matchedBeasiswa.push({
+        beasiswa: beasiswa,
+        cosineSimilarity: cosineSimilarity,
+      })
     }
 
     matchedBeasiswa.sort((a, b) => {
-      if (a.cosineSimilarity === b.cosineSimilarity) {
-        const aMatchingValues =
-          calculateMatchingValues(userVector, a.beasiswa) || []
-        const bMatchingValues =
-          calculateMatchingValues(userVector, b.beasiswa) || []
+      const aMatchingValues =
+        calculateMatchingValues(userVector, a.beasiswa) || []
+      const bMatchingValues =
+        calculateMatchingValues(userVector, b.beasiswa) || []
 
-        const aMatchingCount = aMatchingValues.reduce(
-          (sum, value) => sum + (value ? 1 : 0),
-          0,
-        )
-        const bMatchingCount = bMatchingValues.reduce(
-          (sum, value) => sum + (value ? 1 : 0),
-          0,
-        )
+      const aMatchingCount = aMatchingValues.reduce(
+        (sum, value) => sum + (value ? 1 : 0),
+        0,
+      )
+      const bMatchingCount = bMatchingValues.reduce(
+        (sum, value) => sum + (value ? 1 : 0),
+        0,
+      )
 
-        return bMatchingCount - aMatchingCount
+      if (aMatchingCount === bMatchingCount) {
+        return b.cosineSimilarity - a.cosineSimilarity // Prioritize higher cosine similarity
       } else {
-        return b.cosineSimilarity - a.cosineSimilarity
+        return bMatchingCount - aMatchingCount // Prioritize higher matching count
       }
     })
 
     const top10Beasiswa = matchedBeasiswa.slice(0, 9)
-
-    // try {
-    //   await AsyncStorage.setItem(
-    //     'matchedBeasiswa',
-    //     JSON.stringify(top10Beasiswa),
-    //   )
-    // } catch (error) {
-    //   console.log(error.message)
-    // }
-
-    top10Beasiswa.map((data) => {
-      console.log(data)
-    })
 
     return top10Beasiswa
   }
@@ -111,6 +102,11 @@ const FormMatching = () => {
 
   const renderCard = (card) => {
     const beasiswa = card.beasiswa
+
+    if (!beasiswa) {
+      setIsConfirmed(false)
+      return
+    }
 
     return (
       <View
@@ -134,14 +130,15 @@ const FormMatching = () => {
           resizeMode="contain"
           source={{ uri: beasiswa.gambar }}
         />
-        {/* <Text>{beasiswa.beasiswa.nama}</Text>
-        <Text>Cosine Similarity: {cosineSimilarity}</Text> */}
+        {/* <Text>{beasiswa.nama}</Text> */}
+        {/* <Text>Cosine Similarity: {cosineSimilarity}</Text> */}
       </View>
     )
   }
 
   const onSwipedAllCards = () => {
-    console.log('Semua beasiswa telah ditampilkan')
+    setMatchingBeasiswa(allBeasiswa)
+    setIsConfirmed(false)
   }
 
   return (
@@ -216,44 +213,29 @@ const FormMatching = () => {
               containerStyle={{ zIndex: 5 }}
               placeholder="Pilih Minimal Semester"
               placeholderStyle={{ color: 'grey' }}
-              items={[
-                { label: '1', value: '1' },
-                { label: '2', value: '2' },
-                { label: '3', value: '3' },
-                { label: '4', value: '4' },
-                { label: '5', value: '5' },
-                { label: '6', value: '6' },
-                { label: '7', value: '7' },
-                { label: '8', value: '8' },
-              ]}
-              open={openSemester}
-              setOpen={setOpenSemester}
+              items={semesterItems}
+              open={semesterState.open}
+              setOpen={semesterState.setOpen}
               onSelectItem={(item) =>
                 setUserVector({ ...userVector, semester: item.value })
               }
-              value={valueSemester}
-              setValue={setValueSemester}
+              value={semesterState.value}
+              setValue={semesterState.setValue}
             />
 
             <DropDownPicker
               containerStyle={{ zIndex: 4 }}
               placeholder="Pilih Jurusan"
               placeholderStyle={{ color: 'grey' }}
-              items={[
-                { label: 'Teknik Informatika', value: 'teknik informatika' },
-                { label: 'Ilmu Komputer', value: 'ilmu komputer' },
-                { label: 'Teknik Elektro', value: 'teknik elektro' },
-                { label: 'Teknologi Informasi', value: 'teknologi informasi' },
-                {
-                  label: 'Teknik Telekomunikasi',
-                  value: 'teknik telekomunikasi',
-                },
-                { label: 'Semua Jurusan', value: 'semua jurusan' },
-              ]}
-              open={openJurusan}
-              setOpen={setOpenJurusan}
-              value={valueJurusan}
-              setValue={setValueJurusan}
+              searchable={true}
+              searchPlaceholder="Cari jurusan anda"
+              searchContainerStyle={{}}
+              maxHeight={100}
+              items={jurusanItems}
+              open={jurusanState.open}
+              setOpen={jurusanState.setOpen}
+              value={jurusanState.value}
+              setValue={jurusanState.setValue}
               onSelectItem={(item) =>
                 setUserVector({ ...userVector, jurusan: item.value })
               }
@@ -263,14 +245,11 @@ const FormMatching = () => {
               containerStyle={{ zIndex: 3 }}
               placeholder="Pilih Tipe Pendanaan"
               placeholderStyle={{ color: 'grey' }}
-              items={[
-                { label: 'Fully Funded', value: 'fully funded' },
-                { label: 'Partial Funded', value: 'partial funded' },
-              ]}
-              open={openTipePendanaan}
-              setOpen={setOpenTipePendanaan}
-              value={valueTipePendanaan}
-              setValue={setValueTipePendanaan}
+              items={tipePendanaanItems}
+              open={tipePendanaanState.open}
+              setOpen={tipePendanaanState.setOpen}
+              value={tipePendanaanState.value}
+              setValue={tipePendanaanState.setValue}
               onSelectItem={(item) =>
                 setUserVector({ ...userVector, tipePendanaan: item.value })
               }
@@ -280,16 +259,11 @@ const FormMatching = () => {
               containerStyle={{ zIndex: 2 }}
               placeholder="Pilih Jenjang"
               placeholderStyle={{ color: 'grey' }}
-              items={[
-                { label: 'S1', value: 's1' },
-                { label: 'S2', value: 's2' },
-                { label: 'D3', value: 'd3' },
-                { label: 'D4', value: 'd4' },
-              ]}
-              open={openJenjang}
-              setOpen={setOpenJenjang}
-              value={valueJenjang}
-              setValue={setValueJenjang}
+              items={jenjangItems}
+              open={jenjangState.open}
+              setOpen={jenjangState.setOpen}
+              value={jenjangState.value}
+              setValue={jenjangState.setValue}
               onSelectItem={(item) =>
                 setUserVector({ ...userVector, jenjang: item.value })
               }
@@ -299,14 +273,11 @@ const FormMatching = () => {
               containerStyle={{ zIndex: 1 }}
               placeholder="Pilih range uang saku"
               placeholderStyle={{ color: 'grey' }}
-              items={[
-                { label: '1.000.000-2.000.000', value: '1000000-2000000' },
-                { label: '4.000.000-5.000.000', value: '4000000-5000000' },
-              ]}
-              open={openRangeUangSaku}
-              setOpen={setOpenRangeUangSaku}
-              value={valueRangeUangSaku}
-              setValue={setValueRangeUangSaku}
+              items={rangeUangSakuItems}
+              open={rangeUangSakuState.open}
+              setOpen={rangeUangSakuState.setOpen}
+              value={rangeUangSakuState.value}
+              setValue={rangeUangSakuState.setValue}
               onSelectItem={(item) =>
                 setUserVector({ ...userVector, rangeUangSaku: item.value })
               }

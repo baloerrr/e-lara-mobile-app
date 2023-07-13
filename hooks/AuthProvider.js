@@ -121,6 +121,16 @@ const AuthProvider = ({children}) => {
           }
     }
 
+    const resetPassword = async(email) => {
+      if(email != null) {
+        await firebase.auth().sendPasswordResetEmail(email).then(() => {
+          Alert.alert('Reset password sudah dikirim melalui email')
+        })
+      } else {
+        Alert.alert('Masukkan email yang valid')
+      }
+    }
+
     const logout = () => {
         firebase.auth().signOut().then(() => {
           setUser(null)
@@ -138,6 +148,7 @@ const AuthProvider = ({children}) => {
       isLoading,
       setIsLoading,
       register,
+      resetPassword,
       login, 
       logout, 
       getUser, 

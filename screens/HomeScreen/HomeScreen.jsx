@@ -1,145 +1,559 @@
+import React, { useState } from 'react'
 import {
   View,
+  Alert,
   Text,
-  ScrollView,
-  FlatList,
   TouchableOpacity,
   Image,
-  Dimensions,
-  StyleSheet,
+  FlatList,
 } from 'react-native'
-import React, { useContext } from 'react'
-import { AuthContext } from '../../hooks/AuthProvider'
-import { useNavigation } from '@react-navigation/native'
+import Swiper from 'react-native-deck-swiper'
+import DropDownPicker from 'react-native-dropdown-picker'
 import HeaderComponent from '../../components/Header/HeaderComponent'
-import { SafeAreaView } from 'react-native'
+import {
+  jenjangItems,
+  jurusanItems,
+  rangeUangSakuItems,
+} from '../../constants/DropdownItems'
+import useDropdownState from '../../hooks/useDropdownState'
+import FundingOptions from '../../components/FundingOptions/FundingOptions'
+import { Slider } from '@rneui/themed'
+import useMatching from '../../hooks/useMatching'
+import { Entypo } from '@expo/vector-icons'
+import { firebase } from '../../firebase'
+import { useEffect } from 'react'
 
-const beasiswaData = [
-  {
-    id: 123,
-    namaBeasiswa: 'LPDP',
-    deskripsi:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi mollitia nostrum, exercitationem, deserunt praesentium fugiat dolore quas enim nesciunt voluptatum laborum! Hic labore enim aliquid, consequatur numquam illum! Cupiditate, perferendis?',
-    gambar: 'https://beasiswalpdp.kemenkeu.go.id/images/logo-lpdp-min.png',
-    linkBeasiswa: 'https://beasiswalpdp.kemenkeu.go.id/',
-  },
-  {
-    id: 432,
-    namaBeasiswa: 'BANK BI',
-    deskripsi:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi mollitia nostrum, exercitationem, deserunt praesentium fugiat dolore quas enim nesciunt voluptatum laborum! Hic labore enim aliquid, consequatur numquam illum! Cupiditate, perferendis?',
-    gambar: 'https://itk.ac.id/wp-content/uploads/2020/01/fdfsfrfrefrf.jpg',
-    linkBeasiswa: 'https://beasiswalpdp.kemenkeu.go.id/',
-  },
-  {
-    id: 234,
-    namaBeasiswa: 'Dicoding',
-    deskripsi:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi mollitia nostrum, exercitationem, deserunt praesentium fugiat dolore quas enim nesciunt voluptatum laborum! Hic labore enim aliquid, consequatur numquam illum! Cupiditate, perferendis?',
-    gambar:
-      'https://secure.gravatar.com/avatar/019341b43c34bb322f316e57312ecaef?s=500&d=blank&r=g',
-    linkBeasiswa: 'https://beasiswalpdp.kemenkeu.go.id/',
-  },
-  {
-    id: 321,
-    namaBeasiswa: 'Dicoding',
-    deskripsi:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi mollitia nostrum, exercitationem, deserunt praesentium fugiat dolore quas enim nesciunt voluptatum laborum! Hic labore enim aliquid, consequatur numquam illum! Cupiditate, perferendis?',
-    gambar:
-      'https://secure.gravatar.com/avatar/019341b43c34bb322f316e57312ecaef?s=500&d=blank&r=g',
-    linkBeasiswa: 'https://beasiswalpdp.kemenkeu.go.id/',
-  },
-]
+const FormMatching = () => {
+  const [isConfirmed, setIsConfirmed] = useState(false)
+  const [userVector, setUserVector] = useState({
+    ipk: '',
+    semester: '',
+    jurusan: '',
+    tipePendanaan: '',
+    jenjang: '',
+    rangeUangSaku: [0, 1000],
+  })
+  const [selectedCard, setSelectedCard] = useState(null)
 
-const height = Dimensions.get('window').height
-const width = Dimensions.get('window').width
+  const clearFilters = () => {
+    setUserVector({
+      ipk: '',
+      semester: '',
+      jurusan: '',
+      tipePendanaan: '',
+      jenjang: '',
+      rangeUangSaku: '',
+    })
+  }
 
-const HomeScreen = () => {
-  const { logout } = useContext(AuthContext)
-  const navigation = useNavigation()
-  return (
-    <SafeAreaView>
+  const { jenjangState, jurusanState, rangeUangSakuState } = useDropdownState()
+
+  const {
+    matchingBeasiswa,
+    setMatchingBeasiswa,
+    findMatchingBeasiswa,
+    allBeasiswa,
+    handleSaveBeasiswa,
+    // handleSaveButtonPress,
+  } = useMatching()
+
+  useEffect(() => {
+    setSelectedCard(matchingBeasiswa[0]) // Mengatur card pertama sebagai selectedCard saat matchingBeasiswa berubah
+  }, [matchingBeasiswa])
+
+  const handleFindMatchingBeasiswa = () => {
+    if (
+      !userVector.ipk ||
+      !userVector.semester ||
+      !userVector.jurusan ||
+      !userVector.tipePendanaan ||
+      !userVector.jenjang ||
+      !userVector.rangeUangSaku
+    ) {
+      Alert.alert('Peringatan', 'Harap isi semua kolom input terlebih dahulu.')
+      return
+    }
+
+    const matchedBeasiswa = findMatchingBeasiswa(userVector)
+    setMatchingBeasiswa(matchedBeasiswa)
+    setIsConfirmed(true)
+  }
+
+  const handleSaveButtonPress = () => {
+    if (selectedCard) {
+      // Menyimpan card yang dipilih ke Firestore
+      firebase
+        .firestore()
+        .collection('savedBeasiswa')
+        .add(selectedCard.beasiswa)
+        .then(() => {
+          console.log('Card berhasil disimpan ke database')
+          // Lakukan tindakan lain setelah card berhasil disimpan
+          // ...
+        })
+        .catch((error) => {
+          console.log('Gagal menyimpan card ke database:', error.message)
+          // Lakukan penanganan error jika diperlukan
+          // ...
+        })
+    }
+  }
+
+  const renderCard = (card) => {
+    const beasiswa = card.beasiswa
+
+    if (!beasiswa) {
+      setIsConfirmed(false)
+      return
+    }
+
+    return (
       <View
+        key={beasiswa.id}
         style={{
-          width: width,
-          height: height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          height: 420,
+          position: 'relative',
+          borderRadius: 20,
         }}
       >
+        <Image
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            borderRadius: 20,
+          }}
+          resizeMode="contain"
+          source={{ uri: beasiswa.gambar }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            backgroundColor: 'transparant',
+            borderBottomRightRadius: 20,
+            borderBottomLeftRadius: 20,
+            padding: 15,
+          }}
+        >
+          <Text>{beasiswa.nama}</Text>
+          <Text>{beasiswa.tipePendanaan}</Text>
+          {/* <Text>Cosine Similarity: {cosineSimilarity}</Text> */}
+        </View>
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'center',
-            marginBottom: 20,
+            justifyContent: 'space-around',
+            paddingBottom: 100,
           }}
         >
-          <HeaderComponent />
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'red',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 40,
+              width: 64,
+              height: 64,
+            }}
+          >
+            <Entypo name="cross" size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'green',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 40,
+              width: 64,
+              height: 64,
+            }}
+            onPress={() => handleSaveButtonPress()}
+          >
+            <Entypo name="heart" size={30} />
+          </TouchableOpacity>
         </View>
+      </View>
+    )
+  }
+
+  const onSwipedAllCards = () => {
+    setMatchingBeasiswa(allBeasiswa)
+    setIsConfirmed(false)
+  }
+
+  const handleSwiped = (index) => {
+    setSelectedCard(matchingBeasiswa[index])
+    console.log(matchingBeasiswa[index])
+  }
+
+  return (
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      {isConfirmed && matchingBeasiswa.length > 0 ? (
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: 355,
+              paddingTop: 20,
+              alignItems: 'center',
+            }}
+          >
+            <HeaderComponent title="Matches" />
+          </View>
+          <Swiper
+            cards={matchingBeasiswa}
+            renderCard={renderCard}
+            onSwipedAll={onSwipedAllCards}
+            onSwiped={handleSwiped}
+            stackSize={3}
+            stackSeparation={15}
+            cardIndex={0}
+            backgroundColor="transparent"
+            animateOverlayLabelsOpacity
+            animateCardOpacity
+            swipeBackCard
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              paddingBottom: 100,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: 'red',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 40,
+                width: 64,
+                height: 64,
+              }}
+            >
+              <Entypo name="cross" size={30} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: 'green',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 40,
+                width: 64,
+                height: 64,
+              }}
+              onPress={handleSaveBeasiswa}
+            >
+              <Entypo name="heart" size={30} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : (
         <FlatList
-          data={beasiswaData}
-          renderItem={({ item }) => {
-            return (
+          contentContainerStyle={{ flexGrow: 1 }}
+          data={[{ key: 'form' }]}
+          renderItem={() => (
+            <View
+              style={{
+                flexDirection: 'column',
+                gap: 20,
+              }}
+            >
               <View
                 style={{
-                  flexDirection: 'column',
-                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: 355,
+                  paddingTop: 20,
                   alignItems: 'center',
                 }}
               >
-                <TouchableOpacity style={styles.cardContainer}>
-                  <Image
-                    source={{ uri: item.gambar }}
-                    style={styles.cardImage}
-                    resizeMode="contain"
-                  />
-                  <View style={styles.cardContent}>
-                    <Text style={styles.cardTitle}>{item.namaBeasiswa}</Text>
-                    <Text style={styles.cardDescription}>{item.deskripsi}</Text>
-                  </View>
+                <HeaderComponent title={'Filters'} />
+                <TouchableOpacity onPress={clearFilters}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontWeight: 'bold',
+                      color: '#3F4BF2',
+                    }}
+                  >
+                    Clear
+                  </Text>
                 </TouchableOpacity>
               </View>
-            )
-          }}
-          keyExtractor={(item) => item.id.toString()}
+
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  padding: 20,
+                  marginHorizontal: 20,
+                  borderRadius: 15,
+                  gap: 20,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    gap: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    Tipe Pendanaan
+                  </Text>
+                  <FundingOptions
+                    selectedOption={userVector.tipePendanaan}
+                    onOptionChange={(option) => {
+                      setUserVector((prevUserVector) => ({
+                        ...prevUserVector,
+                        tipePendanaan: option,
+                      }))
+                    }}
+                  />
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    gap: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    Jurusan
+                  </Text>
+                  <DropDownPicker
+                    containerStyle={{ zIndex: 4 }}
+                    placeholder="Pilih Jurusan"
+                    placeholderStyle={{ color: 'grey' }}
+                    searchable={true}
+                    searchPlaceholder="Cari jurusan anda"
+                    searchContainerStyle={{}}
+                    dropDownDirection="TOP"
+                    maxHeight={100}
+                    items={jurusanItems}
+                    open={jurusanState.open}
+                    setOpen={jurusanState.setOpen}
+                    value={jurusanState.value}
+                    setValue={jurusanState.setValue}
+                    onSelectItem={(item) =>
+                      setUserVector({ ...userVector, jurusan: item.value })
+                    }
+                  />
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    gap: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    Jenjang
+                  </Text>
+                  <DropDownPicker
+                    containerStyle={{ zIndex: 2 }}
+                    placeholder="Pilih Jenjang"
+                    placeholderStyle={{ color: 'grey' }}
+                    items={jenjangItems}
+                    open={jenjangState.open}
+                    setOpen={jenjangState.setOpen}
+                    value={jenjangState.value}
+                    setValue={jenjangState.setValue}
+                    onSelectItem={(item) =>
+                      setUserVector({ ...userVector, jenjang: item.value })
+                    }
+                  />
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    Indeks Prestasi Kumulatif
+                  </Text>
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    {userVector.ipk}
+                  </Text>
+                </View>
+                <Slider
+                  value={userVector.ipk}
+                  minimumValue={0}
+                  maximumValue={4}
+                  step={0.01}
+                  thumbTintColor="#3F4BF2"
+                  thumbStyle={{ width: 35, height: 35, borderRadius: 20 }}
+                  minimumTrackTintColor="#3F4BF2"
+                  maximumTrackTintColor="#A0A4A8"
+                  onValueChange={(value) => {
+                    const roundedValue = Number(value.toFixed(2))
+                    setUserVector((prevUserVector) => ({
+                      ...prevUserVector,
+                      ipk: roundedValue,
+                    }))
+                  }}
+                />
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    Semester
+                  </Text>
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    {userVector.semester}
+                  </Text>
+                </View>
+                <Slider
+                  value={userVector.semester}
+                  minimumValue={0}
+                  maximumValue={14}
+                  step={1}
+                  thumbTintColor="#3F4BF2"
+                  thumbStyle={{ width: 35, height: 35, borderRadius: 20 }}
+                  minimumTrackTintColor="#3F4BF2"
+                  maximumTrackTintColor="#A0A4A8"
+                  onValueChange={(value) => {
+                    setUserVector((prevUserVector) => ({
+                      ...prevUserVector,
+                      semester: value,
+                    }))
+                  }}
+                />
+
+                {/* <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <TextInput
+                style={{
+                  width: '40%',
+                  height: 40,
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                }}
+                value={userVector.rangeUangSaku[0].toString()}
+                onChangeText={(value) => {
+                  setUserVector((prevUserVector) => ({
+                    ...prevUserVector,
+                    rangeUangSaku: [
+                      Number(value),
+                      prevUserVector.rangeUangSaku[1],
+                    ],
+                  }))
+                }}
+                keyboardType="numeric"
+                placeholder="Minimum Value"
+              />
+              <TextInput
+                style={{
+                  width: '40%',
+                  height: 40,
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                }}
+                value={userVector.rangeUangSaku[1].toString()}
+                onChangeText={(value) => {
+                  setUserVector((prevUserVector) => ({
+                    ...prevUserVector,
+                    rangeUangSaku: [
+                      prevUserVector.rangeUangSaku[0],
+                      Number(value),
+                    ],
+                  }))
+                }}
+                keyboardType="numeric"
+                placeholder="Maximum Value"
+              />
+
+              {console.log(userVector.rangeUangSaku.join('-'))}
+            </View> */}
+
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    gap: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    Range Uang Saku
+                  </Text>
+                  <DropDownPicker
+                    containerStyle={{ zIndex: 1 }}
+                    placeholder="Pilih range uang saku"
+                    placeholderStyle={{ color: 'grey' }}
+                    items={rangeUangSakuItems}
+                    open={rangeUangSakuState.open}
+                    setOpen={rangeUangSakuState.setOpen}
+                    value={rangeUangSakuState.value}
+                    setValue={rangeUangSakuState.setValue}
+                    onSelectItem={(item) =>
+                      setUserVector({
+                        ...userVector,
+                        rangeUangSaku: item.value,
+                      })
+                    }
+                  />
+                </View>
+
+                <TouchableOpacity
+                  style={{
+                    paddingVertical: 7,
+                    paddingHorizontal: 72,
+                    borderRadius: 4,
+                    elevation: 3,
+                    backgroundColor: '#3F4BF2',
+                    borderRadius: 15,
+                    width: 315,
+                    height: 55,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 70,
+                  }}
+                  onPress={handleFindMatchingBeasiswa}
+                >
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      lineHeight: 21,
+                      fontWeight: 'bold',
+                      letterSpacing: 0.25,
+                      color: 'white',
+                    }}
+                  >
+                    Konfirmasi
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         />
-      </View>
-    </SafeAreaView>
+      )}
+    </View>
   )
 }
 
-export default HomeScreen
-
-const styles = StyleSheet.create({
-  cardContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    height: 180,
-    marginVertical: 10,
-    paddingHorizontal: 20, // Tambahkan jarak kiri dan kanan di sini
-    paddingVertical: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  cardImage: {
-    width: 70,
-    height: 70,
-    marginRight: 10,
-    borderRadius: 25,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  cardDescription: {
-    fontSize: 14,
-    textAlign: 'justify',
-  },
-})
+export default FormMatching

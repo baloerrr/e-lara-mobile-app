@@ -2,8 +2,9 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableHighlight,
   Image,
+  ImageBackground,
+  TouchableOpacity,
 } from 'react-native'
 import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -21,54 +22,68 @@ const LandingScreen = () => {
     navigation.navigate('Login')
   }
 
+  const registerNavigate = () => {
+    navigation.navigate('Register')
+  }
+
   return (
     <SafeAreaView>
-      <View style={styles.container}>
+      <ImageBackground
+        source={require('../../assets/E-Lara/landing_background.png')}
+        style={styles.container}
+      >
         <View style={styles.imageContainer}>
           <Image
-            source={require('../../assets/E-Lara/landingImage.png')}
             resizeMode="cover"
-            style={{
-              width: 400,
-              height: 310,
-            }}
+            source={require('../../assets/E-Lara/logo.png')}
           />
         </View>
+
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
-            Wujudkan <Text style={styles.textOrange}>Impian Pendidikanmu</Text>
-            {'\n'} Bersama Kami
-          </Text>
-          <Text style={styles.spanTitle}>
-            Ikuti kami untuk menemukan Beasiswa Impianmu
+            Jalan <Text style={styles.textBlue}>menuju</Text> mimpimu {'\n'}{' '}
+            Temukan <Text style={styles.textBlue}>Beasiswa</Text>
           </Text>
         </View>
+
         <View style={styles.buttonContainer}>
-          <TouchableHighlight
-            onPress={loginNavigate}
-            style={styles.buttonBlack}
+          <TouchableOpacity
+            onPress={registerNavigate}
+            style={styles.buttonBlue}
           >
             <View style={styles.elaraContainer}>
-              <Text style={styles.textButtonBlack}>LANJUTKAN</Text>
-              <Image
-                source={require('../../assets/E-Lara/top-right-angled.png')}
-                style={styles.buttonBlackImage}
-              />
+              <Text style={styles.textButtonBlue}>Daftar</Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.buttonBlue}>
-            <View style={styles.facebookContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={loginNavigate}
+            style={styles.buttonTransparent}
+          >
+            <View style={styles.elaraContainer}>
+              <Text style={styles.textButtonTransparent}>Masuk</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.separatorContainer}>
+          <View style={styles.lineHorizontal} />
+          <View>
+            <Text style={styles.separatorText}>ATAU</Text>
+          </View>
+          <View style={styles.lineHorizontal} />
+        </View>
+
+        <View style={styles.socialButtonContainer}>
+          <TouchableOpacity>
+            <View style={styles.socialButton}>
               <Image
-                source={require('../../assets/E-Lara/facebook.png')}
+                source={require('../../assets/E-Lara/facebook.jpg')}
                 resizeMode="cover"
-                style={styles.facebookImage}
+                style={styles.socialImage}
               />
-              <Text style={styles.textButtonBlue}>
-                LANJUTKAN DENGAN FACEBOOK
-              </Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={
               token
                 ? getUser
@@ -76,17 +91,16 @@ const LandingScreen = () => {
             }
             style={styles.buttonGray}
           >
-            <View style={styles.googleContainer}>
+            <View style={styles.socialButton}>
               <Image
-                source={require('../../assets/E-Lara/google.png')}
+                source={require('../../assets/E-Lara/google.jpg')}
                 resizeMode="cover"
-                style={styles.googleImage}
+                style={styles.socialImage}
               />
-              <Text style={styles.textButtonGray}>LANJUTKAN DENGAN GOOGLE</Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   )
 }
