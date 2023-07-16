@@ -2,9 +2,9 @@ import React from 'react'
 import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen/HomeScreen'
-import DonateScreen from '../screens/DonateScreen/DonateScreen.jsx'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen.jsx'
 import FormMatching from '../screens/FormMatching/FormMatching.jsx'
+import SaveCardScreen from '../screens/SaveCardScreen/SaveCardScreen.jsx'
 
 const Tab = createBottomTabNavigator()
 
@@ -25,7 +25,7 @@ const BottomNavigationBar = () => {
             iconName = focused
               ? require('../assets/E-Lara/card.png')
               : require('../assets/E-Lara/card_fill.png')
-          } else if (rn === 'Donasi') {
+          } else if (rn === 'SaveCard') {
             iconName = focused
               ? require('../assets/E-Lara/love.png')
               : require('../assets/E-Lara/love_fill.png')
@@ -41,14 +41,13 @@ const BottomNavigationBar = () => {
               resizeMode="contain"
               style={{
                 width: 22,
-
                 height: 22,
                 tintColor: color,
               }}
             />
           )
         },
-        activeTintColor: '#3F4BF2',
+        activeTintColor: '#F07DEA',
         tabBarStyle: {
           height: 65,
           margin: 10,
@@ -61,7 +60,7 @@ const BottomNavigationBar = () => {
     >
       <Tab.Screen name="Beranda" component={HomeScreen} />
       {/* <Tab.Screen name="Form Matching" component={FormMatching} /> */}
-      <Tab.Screen name="Donasi" component={DonateScreen} />
+      <Tab.Screen name="SaveCard" component={SaveCardScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   )

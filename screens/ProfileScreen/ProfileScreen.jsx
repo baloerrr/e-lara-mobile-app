@@ -1,194 +1,294 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, Button, Alert, TextInput, ScrollView } from 'react-native'
-import DropdownPicker from 'react-native-dropdown-picker'
-import { firebase } from '../../firebase'
-import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState, useContext } from 'react'
+import {
+  View,
+  Text,
+  Alert,
+  TextInput,
+  ScrollView,
+  SafeAreaView,
+  StyleSheet,
+} from 'react-native'
+import { AuthContext } from '../../hooks/AuthProvider'
+import { TouchableOpacity } from 'react-native'
+import { Image } from 'react-native'
+import useProfileData from '../../hooks/useProfileData'
 
-const BeasiswaScreen = () => {
-  const [namaBeasiswa, setNamaBeasiswa] = useState('')
-  const [ipkMin, setIpkMin] = useState('')
-
-  const navigation = useNavigation()
-
-  const [openJurusan, setOpenJurusan] = useState(false)
-  const [valueJurusan, setValueJurusan] = useState(null)
-  const [jurusanItem, setJurusanItem] = useState([
-    { label: 'Teknik Informatika', value: 'teknik informatika' },
-    { label: 'Ilmu Komputer', value: 'ilmu komputer' },
-    { label: 'Teknik Elektro', value: 'teknik elektro' },
-    { label: 'Teknologi Informasi', value: 'teknologi informasi' },
-    { label: 'Teknik Telekomunikasi', value: 'teknik telekomunikasi' },
-    { label: 'Semua Jurusan', value: 'semua jurusan' },
-    { label: 'Semua ', value: 'semua ' },
-  ])
-
-  const [openJenjang, setOpenJenjang] = useState(false)
-  const [valueJenjang, setValueJenjang] = useState(null)
-  const [jenjangItem, setJenjangItem] = useState([
-    { label: 'S1', value: 's1' },
-    { label: 'S2', value: 's2' },
-    { label: 'D3', value: 'd3' },
-    { label: 'D4', value: 'd4' },
-  ])
-
-  const [openSemester, setOpenSemester] = useState(false)
-  const [valueSemester, setValueSemester] = useState(null)
-  const [semesterItem, setSemesterItem] = useState([
-    { label: '1', value: '1' },
-    { label: '2', value: '2' },
-    { label: '3', value: '3' },
-    { label: '4', value: '4' },
-    { label: '5', value: '5' },
-    { label: '6', value: '6' },
-    { label: '7', value: '7' },
-    { label: '8', value: '8' },
-  ])
-
-  const [openTipePendanaan, setOpenTipePendanaan] = useState(false)
-  const [valueTipePendanaan, setValueTipePendanaan] = useState(null)
-  const [tipePendanaanItem, setTipePendanaanItem] = useState([
-    { label: 'Fully Funded', value: 'fully funded' },
-    { label: 'Partial Funded', value: 'partial funded' },
-  ])
-
-  const [openRangeUangSaku, setOpenRangeUangSaku] = useState(false)
-  const [valueRangeUangSaku, setValueRangeUangSaku] = useState(null)
-  const [rangeUangSakuItem, setRangeUangSakuItem] = useState([
-    { label: '1.000.000-2.000.000', value: '1000000-2000000' },
-    { label: '3.000.000-4.000.000', value: '3000000-4000000' },
-    { label: '4.000,000-5000000', value: '4000000-5000000' },
-  ])
+const ProfileScreen = () => {
+  const { logout, user } = useContext(AuthContext)
+  const {
+    handleEdit,
+    handleSave,
+    image,
+    isEditing,
+    jurusan,
+    namaLengkap,
+    noHandphone,
+    perguruanTinggi,
+    pickImage,
+    semester,
+    setJurusan,
+    setNamaLengkap,
+    setNoHandphone,
+    setPerguruanTinggi,
+    setSemester,
+  } = useProfileData()
 
   useEffect(() => {
-    console.log(valueJenjang)
-  }, [valueJenjang])
-
-  const handleAddBeasiswa = async () => {
-    try {
-      await firebase
-        .firestore()
-        .collection('beasiswa')
-        .add({
-          nama: namaBeasiswa,
-          ipkMin: ipkMin,
-          jurusan: valueJurusan,
-          semester: valueSemester,
-          jenjang: valueJenjang,
-          tipePendanaan: valueTipePendanaan,
-          rangeUangSaku: valueRangeUangSaku,
-        })
-        .then(() => {
-          Alert.alert('Sukses', 'Berhasil Daftar')
-          setNamaBeasiswa('')
-          setIpkMin('')
-          setValueJurusan(null)
-          setValueSemester(null)
-          setValueJenjang(null)
-          setValueTipePendanaan(null)
-          setValueRangeUangSaku(null)
-        })
-      console.log('Beasiswa added successfully!')
-    } catch (error) {
-      console.error('Error adding beasiswa:', error)
-    }
-  }
-
-  useEffect(() => {}, [])
+    console.log(namaLengkap)
+  }, [namaLengkap])
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flexDirection: 'column', gap: 10, margin: 10 }}>
-        <Text>Nama</Text>
-        <TextInput
-          onChangeText={(namaBeasiswa) => setNamaBeasiswa(namaBeasiswa)}
-          placeholder="Nama Beasiswa"
-          value={namaBeasiswa}
-        />
-        <Text>IPK</Text>
-        <TextInput
-          onChangeText={(ipkMin) => setIpkMin(ipkMin)}
-          placeholder="Minimal IPK"
-          value={ipkMin}
-          keyboardType="numeric"
-        />
-        <Text>Jurusan</Text>
-        <DropdownPicker
-          containerStyle={{ zIndex: 5 }}
-          placeholder="Pilih Jurusan"
-          listMode="SCROLLVIEW"
-          scrollViewProps={{
-            nestedScrollEnabled: true,
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          backgroundColor: 'white',
+          paddingHorizontal: 20,
+        }}
+        scrollEnabled={true}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 40,
           }}
-          closeAfterSelecting={true}
-          maxHeight={200}
-          multiple={true}
-          max={7}
-          min={1}
-          items={jurusanItem}
-          value={valueJurusan}
-          open={openJurusan}
-          setOpen={setOpenJurusan}
-          setValue={setValueJurusan}
-          setItems={setJurusanItem}
-        />
-        <Text>Semester</Text>
-        <DropdownPicker
-          containerStyle={{ zIndex: 4 }}
-          placeholder="Pilih Minimal Semester"
-          items={semesterItem}
-          value={valueSemester}
-          open={openSemester}
-          setOpen={setOpenSemester}
-          setValue={setValueSemester}
-          setItems={setSemesterItem}
-        />
-        <Text>Jenjang</Text>
-        <DropdownPicker
-          containerStyle={{ zIndex: 3 }}
-          multiple={true}
-          max={7}
-          min={1}
-          placeholder="Pilih Jenjang"
-          items={jenjangItem}
-          value={valueJenjang}
-          open={openJenjang}
-          setOpen={setOpenJenjang}
-          setValue={setValueJenjang}
-          setItems={setJenjangItem}
-        />
-        <Text>Tipe Pendanaan</Text>
-        <DropdownPicker
-          containerStyle={{ zIndex: 2 }}
-          placeholder="Pilih Tipe Pendanaan"
-          items={tipePendanaanItem}
-          value={valueTipePendanaan}
-          open={openTipePendanaan}
-          setOpen={setOpenTipePendanaan}
-          setValue={setValueTipePendanaan}
-          setItems={setTipePendanaanItem}
-        />
-        <Text>Range Uang Saku</Text>
-        <DropdownPicker
-          containerStyle={{ zIndex: 1 }}
-          placeholder="Pilih Range Uang Saku"
-          items={rangeUangSakuItem}
-          value={valueRangeUangSaku}
-          open={openRangeUangSaku}
-          setOpen={setOpenRangeUangSaku}
-          setValue={setValueRangeUangSaku}
-          setItems={setRangeUangSakuItem}
-        />
+        >
+          <View
+            style={{
+              backgroundColor: '#A460ED',
+              width: 318,
+              height: 203,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 25,
+              marginBottom: 30,
+              gap: 10,
+            }}
+          >
+            {!isEditing ? (
+              <TouchableOpacity>
+                <View
+                  style={{
+                    width: 140,
+                    height: 140,
+                    borderRadius: 70,
+                    backgroundColor: '#EEEEEE',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 5,
+                    borderColor: 'white',
+                  }}
+                >
+                  {!user.photoURL || image ? (
+                    <Image
+                      source={{ uri: image }}
+                      style={{
+                        width: 140,
+                        height: 140,
+                        borderRadius: 75,
+                        borderWidth: 5,
+                        borderColor: 'white',
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      source={{ uri: user.photoURL }}
+                      style={{
+                        width: 140,
+                        height: 140,
+                        borderRadius: 75,
+                        borderWidth: 5,
+                        borderColor: 'white',
+                      }}
+                    />
+                  )}
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={pickImage}>
+                <View
+                  style={{
+                    width: 140,
+                    height: 140,
+                    borderRadius: 70,
+                    backgroundColor: '#EEEEEE',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  {!user.photoURL || image ? (
+                    <Image
+                      source={{ uri: image }}
+                      style={{
+                        width: 140,
+                        height: 140,
+                        borderRadius: 70,
+                        borderWidth: 5,
+                        borderColor: 'white',
+                      }}
+                    />
+                  ) : (
+                    <Image
+                      source={{ uri: user.photoURL }}
+                      style={{
+                        width: 140,
+                        height: 140,
+                        borderRadius: 75,
+                        borderWidth: 5,
+                        borderColor: 'white',
+                      }}
+                    />
+                  )}
+                </View>
+              </TouchableOpacity>
+            )}
 
-        <Button title="Submit" onPress={handleAddBeasiswa} />
-        <Button
-          title="percobaan"
-          onPress={() => {
-            navigation.navigate('Percobaan')
-          }}
-        />
-      </View>
-    </View>
+            <Text style={styles.emailText}>{user.email}</Text>
+          </View>
+
+          <View
+            style={{
+              width: 318,
+              marginBottom: 30,
+              flexDirection: 'column',
+              gap: 5,
+            }}
+          >
+            <Text style={styles.text}>Nama</Text>
+            <TextInput
+              style={styles.input}
+              value={namaLengkap}
+              onChangeText={setNamaLengkap}
+              editable={isEditing}
+            />
+
+            <Text style={styles.text}>Perguruan Tinggi</Text>
+            <TextInput
+              style={styles.input}
+              value={perguruanTinggi}
+              onChangeText={setPerguruanTinggi}
+              editable={isEditing}
+              placeholder="Masukkan perguruan tinggi anda"
+            />
+
+            <Text style={styles.text}>Semester</Text>
+            <TextInput
+              style={styles.input}
+              value={semester}
+              onChangeText={setSemester}
+              editable={isEditing}
+              placeholder="Masukkan semester anda "
+            />
+
+            <Text style={styles.text}>Jurusan</Text>
+            <TextInput
+              style={styles.input}
+              value={jurusan}
+              onChangeText={setJurusan}
+              editable={isEditing}
+              placeholder="Masukkan jurusan anda"
+            />
+
+            <Text style={styles.text}>Nomor Telepon</Text>
+            <TextInput
+              style={styles.input}
+              value={noHandphone}
+              onChangeText={setNoHandphone}
+              editable={isEditing}
+            />
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 10,
+              marginBottom: 80,
+            }}
+          >
+            {!isEditing ? (
+              <TouchableOpacity onPress={handleEdit} style={styles.buttonPink}>
+                <Text style={styles.textButtonPink}>Edit</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={handleSave} style={styles.buttonPink}>
+                <Text style={styles.textButtonPink}>Save</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity onPress={logout} style={styles.buttonWhite}>
+              <Text style={styles.textButtonWhite}>Keluar</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity style={styles.buttonWhite}>
+              <Text style={styles.textButtonWhite}>Upload</Text>
+            </TouchableOpacity> */}
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
-export default BeasiswaScreen
+const styles = StyleSheet.create({
+  text: {
+    color: '#A460ED',
+  },
+
+  emailText: {
+    fontSize: 15,
+    color: '#EEEEEE',
+    fontWeight: '500',
+  },
+  input: {
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    backgroundColor: '#f8faf9',
+    borderRadius: 20,
+    width: 320,
+    height: 55,
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: '#A460ED',
+  },
+
+  buttonPink: {
+    width: 320,
+    height: 55,
+    elevation: 3,
+    backgroundColor: '#F07DEA',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  textButtonPink: {
+    fontSize: 18,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
+
+  buttonWhite: {
+    width: 320,
+    height: 55,
+    // elevation: 3,
+    backgroundColor: '#EEEEEE',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  textButtonWhite: {
+    fontSize: 18,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: '#A460ED',
+  },
+})
+
+export default ProfileScreen

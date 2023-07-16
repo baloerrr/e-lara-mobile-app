@@ -4,21 +4,17 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Pressable,
-  Image,
   Modal,
   ImageBackground,
 } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { styles } from './RegisterScreen'
 import { useNavigation } from '@react-navigation/native'
-import { firebase } from '../../firebase'
 import Input from '../../components/FormInput/Input'
 import InputPhone from '../../components/FormInput/InputPhone'
 import ModalAlert from '../../components/Modal/ModalAlert'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { AuthContext } from '../../hooks/AuthProvider'
-import useUploadImage from '../../hooks/useUploadImage'
-import * as ImagePicker from 'expo-image-picker'
 import DatePicker from 'react-native-modern-datepicker'
 import { getFormatedDate } from 'react-native-modern-datepicker'
 

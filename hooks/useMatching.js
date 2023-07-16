@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { firebase } from '../firebase'
 import {
   calculateCosineSimilarity,
   calculateMatchingValues,
 } from '../lib/index'
+import { Alert } from 'react-native'
 
 const useMatching = () => {
   const [matchingBeasiswa, setMatchingBeasiswa] = useState([])
   const [allBeasiswa, setAllBeasiswa] = useState([])
-  const [selectedBeasiswaId, setSelectedBeasiswaId] = useState(null)
+  const [selectedCard, setSelectedCard] = useState(null)
+  const swiperRef = useRef(null)
+
 
   useEffect(() => {
     const fetchBeasiswa = async () => {
@@ -70,46 +73,64 @@ const useMatching = () => {
     return top10Beasiswa
   }
 
-  const handleSaveButtonPress = (beasiswaId) => {
-    setSelectedBeasiswaId(beasiswaId);
+  const handleSwipeLeft = () => {
+    if (selectedCard) {
+      const beasiswaId = selectedCard.beasiswa.id;
+      const currentUser = firebase.auth().currentUser.uid
+  
+      // Cek keberadaan kartu di koleksi "savedBeasiswa"
+      firebase
+        .firestore()
+        .collection('savedBeasiswa')
+        .where('id', '==', beasiswaId)
+        .get()
+        .then((querySnapshot) => {
+          if (querySnapshot.size > 0) {
+            // Kartu sudah ada di dalam database
+            Alert.alert('Peringatan', 'Kartu ini sudah tersimpan');
+          } else {
+
+            const beasiswaData = {
+              ...selectedCard.beasiswa,
+              userId: currentUser
+            }
+            firebase
+              .firestore()
+              .collection('savedBeasiswa')
+              .add(beasiswaData)
+              .then(() => {
+                console.log('Card berhasil disimpan ke database');
+                swiperRef.current.swipeLeft();
+              })
+              .catch((error) => {
+                console.log('Gagal menyimpan card ke database:', error.message);
+              });
+          }
+        })
+        .catch((error) => {
+          console.log('Gagal memeriksa kartu di database:', error.message);
+        });
+    }
   };
+  
+  
+  
 
-  const handleSaveBeasiswa = () => {
-    const selectedBeasiswa = matchingBeasiswa.find(
-      (item) => {
-          item.id == selectedBeasiswaId,
-          console.log(selectedBeasiswaId)
-    }
-        
-    )
-
-    if (!selectedBeasiswa) {
-      console.log('Beasiswa tidak ditemukan')
-      return
-    }
-
-    // Simpan data beasiswa ke dalam database
-    firebase
-      .firestore()
-      .collection('savedBeasiswa')
-      .add(selectedBeasiswa.beasiswa)
-      .then(() => {
-        console.log('Beasiswa berhasil disimpan')
-        // Lakukan tindakan lain setelah penyimpanan berhasil
-      })
-      .catch((error) => {
-        console.log('Gagal menyimpan beasiswa:', error)
-        // Lakukan tindakan lain jika terjadi kesalahan saat penyimpanan
-      })
+  const handleSwipeRight = () => {
+    swiperRef.current.swipeRight()
   }
 
+  
   return {
     matchingBeasiswa,
     setMatchingBeasiswa,
     findMatchingBeasiswa,
     allBeasiswa,
-    handleSaveBeasiswa,
-    handleSaveButtonPress
+    handleSwipeLeft,
+    handleSwipeRight,
+    selectedCard, 
+    setSelectedCard,
+    swiperRef
   }
 }
 

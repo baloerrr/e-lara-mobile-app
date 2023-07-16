@@ -142,6 +142,7 @@ const AuthProvider = ({children}) => {
 
     const authContextValue = {
       user, 
+      setUser,
       message, 
       modalVisible,
       setModalVisible,

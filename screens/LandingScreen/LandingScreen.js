@@ -1,67 +1,78 @@
 import { StyleSheet, Dimensions } from 'react-native'
 
-const height = Dimensions.get('window').height
-const width = Dimensions.get('window').width
-
 export const styles = StyleSheet.create({
   container: {
-    width: width,
-    height: height,
+    flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
-    gap: 30
+    justifyContent: 'space-evenly',
+    gap: 30,
+    backgroundColor: '#A460ED',
   },
 
-  imageContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop:50
+  imageContainer: {},
+
+  image: {
+    width: 332,
+    height: 332,
   },
 
   titleContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     textAlign: 'center',
-    paddingTop:20,
+    marginTop: 25,
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: 40,
     letterSpacing: 0,
     textAlign: 'center',
     lineHeight: 30,
-    fontFamily: 'Modernist-Bold'
+    color: 'white',
+    fontWeight: '800',
+    lineHeight: 36,
+    paddingTop:8
   },
+
+  subtitle: {
+    fontSize: 18,
+    textAlign: 'center',
+    fontWeight: 400,
+    color: 'white',
+    letterSpacing: 1,
+    lineHeight: 22,
+    marginTop: 10,
+  },
+
   textBlue: {
     color: '#6E77EE',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   buttonContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     gap: 15,
-    paddingTop:40
   },
 
-  buttonBlue: {
+  buttonPink: {
     width: 295,
     height: 50,
-    borderRadius: 4,
     elevation: 3,
-    backgroundColor: '#6E77EE',
-    borderRadius: 15,
+    backgroundColor: '#F07DEA',
+    borderRadius: 20,
   },
 
   buttonTransparent: {
     backgroundColor: '#E4E4E4',
-    borderRadius: 15,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: '#6E77EE',
+    elevation: 3,
   },
 
-  textButtonBlue: {
+  textButtonPink: {
     fontSize: 20,
     lineHeight: 21,
     fontWeight: 'bold',
@@ -84,47 +95,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     height: 50,
     width: 295,
-  },
-
-  separatorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop:70
-  },
-
-  lineHorizontal: {
-    height: 1,
-    width: 200,
-    marginHorizontal: 30,
-    backgroundColor: 'grey',
-  },
-
-  separatorText: {
-    width: 50,
-    textAlign: 'center',
-    fontSize: 14
-  },
-
-  socialButtonContainer: {
-    flexDirection: 'row',
-    gap: 28,
-    paddingTop:20
-  },
-
-  socialButton: {
-    width: 65,
-    height: 65,
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 15,
-    borderWidth:1,
-    borderColor: '#6E77EE'
-  },
-
-  socialImage: {
-    height: 32,
-    width: 32,
   },
 })
