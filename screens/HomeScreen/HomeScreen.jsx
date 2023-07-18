@@ -127,12 +127,12 @@ const FormMatching = () => {
               gap: 8,
             }}
           >
-            <HeaderComponent title="Matches" />
+            <HeaderComponent title="Matching" />
             <Text
               style={{
                 fontSize: 17,
-                fontWeight: '500',
                 lineHeight: 22,
+                fontFamily: 'Modernist-Regular',
               }}
             >
               Ayoo Beaswan.. {'\n'}temukan beasiswa impian mu disini!!
@@ -144,6 +144,7 @@ const FormMatching = () => {
             onSwipedAll={onSwipedAllCards}
             onSwiped={handleSwiped}
             ref={swiperRef}
+            verticalSwipe={false}
             stackSize={3}
             stackSeparation={15}
             backgroundColor="transparant"
@@ -320,6 +321,7 @@ const FormMatching = () => {
                         borderColor: '#E8E6EA',
                         borderWidth: 1,
                         borderRadius: 20,
+                        elevation: 3,
                       }}
                       dropDownContainerStyle={{
                         borderColor: '#E8E6EA',
@@ -328,6 +330,11 @@ const FormMatching = () => {
                       }}
                       searchContainerStyle={{
                         borderColor: '#E8E6EA',
+                        borderWidth: 1,
+                      }}
+                      searchTextInputStyle={{
+                        borderColor: '#E8E6EA',
+                        borderWidth: 1,
                       }}
                       placeholder="Pilih Jurusan"
                       placeholderStyle={{
@@ -373,6 +380,7 @@ const FormMatching = () => {
                         borderColor: '#E8E6EA',
                         borderWidth: 1,
                         borderRadius: 20,
+                        elevation: 3,
                       }}
                       dropDownContainerStyle={{
                         borderColor: '#E8E6EA',
@@ -501,6 +509,7 @@ const FormMatching = () => {
                         borderColor: '#E8E6EA',
                         borderWidth: 1,
                         borderRadius: 20,
+                        elevation: 3,
                       }}
                       dropDownContainerStyle={{
                         borderColor: '#E8E6EA',
@@ -542,7 +551,7 @@ const FormMatching = () => {
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      marginBottom: 160,
+                      marginBottom: 120,
                     }}
                     onPress={handleFindMatchingBeasiswa}
                   >

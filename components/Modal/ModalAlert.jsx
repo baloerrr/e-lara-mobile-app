@@ -19,7 +19,6 @@ const ModalAlert = (props) => {
     imageSource = require('../../assets/E-Lara/success_icon.png')
   }
 
-  console.log(imageSource)
   return (
     <Modal
       visible={props.visible}

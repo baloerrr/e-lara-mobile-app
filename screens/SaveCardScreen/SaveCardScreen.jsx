@@ -3,10 +3,9 @@ import {
   SafeAreaView,
   Text,
   FlatList,
-  Image,
-  TouchableOpacity,
   RefreshControl,
   Linking,
+  Alert,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { styles } from './SaveCardScreen.js'
@@ -15,7 +14,7 @@ import { firebase } from '../../firebase.js'
 import useCustomFonts from '../../hooks/useCustomFonts.js'
 import ModalDetail from '../../components/Modal/ModalDetail.jsx'
 import { FontAwesome } from '@expo/vector-icons'
-import { Alert } from 'react-native'
+import SavedCard from '../../components/SavedCard/SavedCard.jsx'
 
 const SaveCardScreen = () => {
   const [savedBeasiswa, setSavedBeasiswa] = useState([])
@@ -24,6 +23,24 @@ const SaveCardScreen = () => {
   const [selectCard, setSelectedCard] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const fontsLoaded = useCustomFonts()
+
+  const deleteData = async (item) => {
+    try {
+      const currentUser = firebase.auth().currentUser.uid
+      await firebase
+        .firestore()
+        .collection('savedBeasiswa')
+        .doc(item.id)
+        .delete()
+      Alert.alert('Succes', 'Data berhasil dihapus')
+      setSavedBeasiswa((prevSavedBeasiswa) =>
+        prevSavedBeasiswa.filter((beasiswa) => beasiswa.id !== item.id),
+      )
+      console.log(item.id)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   const fetchData = async () => {
     try {
@@ -43,23 +60,6 @@ const SaveCardScreen = () => {
   useEffect(() => {
     fetchData()
   }, [])
-
-  const deleteData = async (item) => {
-    try {
-      const currentUser = firebase.auth().currentUser.uid
-      await firebase
-        .firestore()
-        .collection('savedBeasiswa')
-        .doc(item.id)
-        .delete()
-      Alert.alert('Succes', 'Data berhasil dihapus')
-      setSavedBeasiswa((prevSavedBeasiswa) =>
-        prevSavedBeasiswa.filter((beasiswa) => beasiswa.id !== item.id),
-      )
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
 
   const onRefresh = () => {
     setRefreshing(true)
@@ -88,38 +88,14 @@ const SaveCardScreen = () => {
     return null
   }
 
-  const Card = ({ item, index }) => {
+  const renderCard = ({ item, index }) => {
     const isLastItem = index === savedBeasiswa.length - 1
 
     const onPressCard = () => {
       toggleModal(item)
     }
-    return (
-      <>
-        <TouchableOpacity
-          onPress={onPressCard}
-          style={[styles.cardContainer, isLastItem && { marginBottom: 25 }]}
-        >
-          <Image
-            resizeMode={isLastItem ? 'stretch' : 'contain'}
-            source={{ uri: item.gambar }}
-            style={
-              isLastItem
-                ? {
-                    width: '100%',
-                    height: 210,
-                    borderTopLeftRadius: 8,
-                    borderTopRightRadius: 8,
-                  }
-                : styles.image
-            }
-          />
-          <View style={styles.content}>
-            <Text style={styles.title}>{item.nama}</Text>
-          </View>
-        </TouchableOpacity>
-      </>
-    )
+
+    return <SavedCard item={item} index={index} onPressCard={onPressCard} />
   }
 
   return (
@@ -136,7 +112,7 @@ const SaveCardScreen = () => {
           </View>
           <FlatList
             data={savedBeasiswa}
-            renderItem={Card}
+            renderItem={renderCard}
             keyExtractor={(item) => item.id.toString()}
             numColumns={numColumns}
             contentContainerStyle={[

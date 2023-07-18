@@ -68,11 +68,9 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 13,
     fontFamily: 'Modernist-Bold',
+    color: 'grey'
   },
-  category: {
-    fontSize: 14,
-    color: 'gray',
-  },
+
   flatListContent: {
     flexGrow: 1,
     paddingBottom: 100,

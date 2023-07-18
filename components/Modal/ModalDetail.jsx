@@ -8,6 +8,8 @@ import {
   StyleSheet,
 } from 'react-native'
 import React from 'react'
+import { useState } from 'react'
+import ModalConfirm from './ModalConfirm'
 
 const ModalDetail = ({
   isModalVisible,
@@ -17,10 +19,31 @@ const ModalDetail = ({
   onDelete,
   props,
 }) => {
+  const [isModalConfirmVisible, setIsModalConfirmVisible] = useState(false)
+
+  const handleConfirmVisible = () => {
+    setIsModalConfirmVisible(true)
+  }
+
   const handleDelete = () => {
     onDelete(props)
-    setTimeout(toggleModal, 1000)
+    setTimeout(() => {
+      toggleModal()
+    }, 1000)
   }
+
+  const handleConfirm = () => {
+    onDelete(props)
+    setTimeout(() => {
+      setIsModalConfirmVisible(false)
+      toggleModal()
+    }, 1000)
+  }
+
+  const handleCancel = () => {
+    setIsModalConfirmVisible(false)
+  }
+
   return (
     <Modal
       visible={isModalVisible}
@@ -45,7 +68,7 @@ const ModalDetail = ({
 
             {FontAwesome ? (
               <TouchableOpacity
-                onPress={handleDelete}
+                onPress={handleConfirmVisible}
                 style={{
                   position: 'absolute',
                   right: 0,
@@ -139,7 +162,7 @@ const ModalDetail = ({
               style={{
                 flexDirection: 'column',
                 justifyContent: 'center',
-                gap: 2,
+                gap: 5,
               }}
             >
               <TouchableOpacity
@@ -159,6 +182,13 @@ const ModalDetail = ({
           </View>
         </ScrollView>
       </View>
+
+      <ModalConfirm
+        visible={isModalConfirmVisible}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+        message="Anda yakin ingin menghapus?"
+      />
     </Modal>
   )
 }
@@ -181,10 +211,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   closeButton: {
-    padding: 10,
-    backgroundColor: '#F07DEA',
-    borderRadius: 15,
     width: '100%',
+    height: 50,
+    elevation: 3,
+    backgroundColor: '#F07DEA',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeButtonText: {
     fontSize: 16,

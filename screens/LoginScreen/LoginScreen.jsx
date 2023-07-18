@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   ImageBackground,
-  StyleSheet,
 } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'

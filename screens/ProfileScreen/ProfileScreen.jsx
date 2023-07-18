@@ -11,6 +11,7 @@ import { AuthContext } from '../../hooks/AuthProvider'
 import { TouchableOpacity } from 'react-native'
 import { Image } from 'react-native'
 import useProfileData from '../../hooks/useProfileData'
+import HeaderComponent from '../../components/Header/HeaderComponent'
 
 const ProfileScreen = () => {
   const { logout, user } = useContext(AuthContext)
@@ -44,10 +45,20 @@ const ProfileScreen = () => {
       >
         <View
           style={{
+            flexDirection: 'column',
+            marginTop: 20,
+            marginHorizontal: 20,
+            gap: 8,
+          }}
+        >
+          <HeaderComponent title="Profile" />
+        </View>
+        <View
+          style={{
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 40,
+            marginTop: 20,
           }}
         >
           <View
@@ -205,19 +216,16 @@ const ProfileScreen = () => {
           >
             {!isEditing ? (
               <TouchableOpacity onPress={handleEdit} style={styles.buttonPink}>
-                <Text style={styles.textButtonPink}>Edit</Text>
+                <Text style={styles.textButtonPink}>Ubah</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={handleSave} style={styles.buttonPink}>
-                <Text style={styles.textButtonPink}>Save</Text>
+                <Text style={styles.textButtonPink}>Simpan</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity onPress={logout} style={styles.buttonWhite}>
               <Text style={styles.textButtonWhite}>Keluar</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.buttonWhite}>
-              <Text style={styles.textButtonWhite}>Upload</Text>
-            </TouchableOpacity> */}
           </View>
         </View>
       </ScrollView>
