@@ -12,7 +12,11 @@ const AuthProvider = ({children}) => {
     const [token, setToken] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState('')
+    const [title, setTitle] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
+    const [isWarning, setIsWarning] = useState(false)
+    const [isError, setIsError] = useState(false)
+    const [isSuccess, setIsSuccess] = useState(false)
 
 
     const [request, response, promptAsync] = Google.useAuthRequest({
@@ -32,6 +36,14 @@ const AuthProvider = ({children}) => {
     const register = async (registerData) => {
       const { email, password, namaLengkap, tempatLahir, tanggalLahir, noHandphone} = registerData;
   
+      if (!email || !password || !namaLengkap || !tempatLahir || !tanggalLahir || !noHandphone) {
+        setIsWarning(true)
+        setTitle('Peringatan')
+        setMessage('Input tidak boleh kosong')
+        setModalVisible(true)
+        return
+      }
+    
       setIsLoading(true);
   
       try {
@@ -39,72 +51,97 @@ const AuthProvider = ({children}) => {
         const timestamps = firebase.firestore.FieldValue.serverTimestamp()
         const user = authResult.user;
 
-        // const response = await fetch(imageUri)
-        // const blob = await response.blob()
-
-        // // const filename = imageUri.substring(imageUri.lastIndexOf('/')+1)
-        // const storageRef = firebase.storage().ref().child(`user_images/${user.uid}`)
-    
-        // await storageRef.put(blob)
-        // const downloadUrl = await storageRef.getDownloadURL()
-  
         await user.sendEmailVerification({
           handleCodeInApp: true,
           url: 'https://e-lara-6b5ba.firebaseapp.com',
         });
-  
-        Alert.alert('Email Verification was sent');
+
         await firebase.firestore().collection('users').doc(user.uid).set({
           namaLengkap,
           email,
           tempatLahir,
           tanggalLahir,
           noHandphone,
-          // gambarUrl: downloadUrl,
           createdAt: timestamps 
         });
-  
+
+        setIsSuccess(true)
+        setTitle('Success')
+        setMessage('Daftar Berhasil. Verifikasi dikirim melalui email')
+        setModalVisible(true)
         setIsLoading(false);
       } catch (error) {
+        if (error.code === 'auth/weak-password') {
+          setIsError(true)
+          setTitle('Gagal')
+          setMessage('Kata sandi terlalu lemah');
+          setModalVisible(true);
+        } else if (error.code === 'auth/email-already-in-use') {
+          setIsError(true)
+          setTitle('Gagal')
+          setMessage('Email sudah digunakan');
+          setModalVisible(true);
+        } else {
+          setIsError(true)
+          setTitle('Gagal')
+          setMessage('Terjadi kesalahan saat mendaftar');
+          setModalVisible(true);
+        }
+        setModalVisible(true)
         setIsLoading(false);
-        console.log(error.message);
       }
     };
     
 
     const login = (email, password) => {
       setIsLoading(true)
-      if(email == '' || password == '') {
-        setModalVisible(true)
+      if (email == '' || password == '') {
+        setIsWarning(true)
+        setTitle('Peringatan')
         setMessage('Input tidak boleh kosong')
-      }  else {
+        setModalVisible(true)
+      } else {
         firebase.auth().signInWithEmailAndPassword(email, password).then((res) => {
+          const user = res.user
+          
+          if (user.emailVerified) {
             setIsLoading(false)
-            const user = res.user
-
-            if(user.emailVerified) {
-              setUser(user)
-              Alert.alert("Success", "Login Berhasil")
-            } else {
-              firebase.auth().signOut();
-              setMessage('Email belum terverifikasi. Silakan verifikasi email Anda.');
-              setModalVisible(true);
-            }
-
+            // setIsSuccess(true)
+            // setTitle('Berhasil')
+            // setMessage('Login Berhasil')
+            // setModalVisible(true)
+            setUser(user)
+          } else {
+            firebase.auth().signOut()
+            setIsWarning(true)
+            setTitle('Peringatan')
+            setMessage('Email belum terverifikasi. Silakan verifikasi email Anda.')
+            setModalVisible(true)
+          }
+    
         }).catch(error => {
           if (error.code === 'auth/invalid-email') {
-            setMessage('Email tidak valid');
+            setIsError(true)
+            setTitle('Gagal')
+            setMessage('Email tidak valid')
+            setModalVisible(true)
           } else if (error.code === 'auth/wrong-password') {
-            setMessage('Password salah');
+            setIsError(true)
+            setTitle('Gagal')
+            setMessage('Password Salah')
+            setModalVisible(true)
           } else {
-            setMessage('Terjadi kesalahan saat login');
+            setIsError(true)
+            setTitle('Gagal')
+            setMessage('Terjadi kesalahan saat login')
+            setModalVisible(true)
           }
           setModalVisible(true)
           setIsLoading(false)
-        }) 
+        })
       }
-        
     }
+    
 
     const getUser = async (token) => {
         try {
@@ -154,7 +191,12 @@ const AuthProvider = ({children}) => {
       logout, 
       getUser, 
       token, 
-      promptAsync
+      promptAsync,
+      title,
+      isError,
+      isSuccess,
+      isWarning, 
+      setIsSuccess
     }
 
   return (

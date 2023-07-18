@@ -1,16 +1,16 @@
 import { SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { styles } from '../LandingScreen/LandingScreen'
-import { AuthContext } from '../../hooks/AuthProvider'
 import * as WebBrowser from 'expo-web-browser'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import useCustomFonts from '../../hooks/useCustomFonts'
 
 WebBrowser.maybeCompleteAuthSession()
 
 const LandingScreen = () => {
   const navigation = useNavigation()
-  const { getUser, token, promptAsync } = useContext(AuthContext)
+  const fontsLoaded = useCustomFonts()
 
   const loginNavigate = () => {
     navigation.navigate('Login')
@@ -27,6 +27,10 @@ const LandingScreen = () => {
     } catch (error) {
       console.warn('Error clearing AsyncStorage:', error)
     }
+  }
+
+  if (!fontsLoaded) {
+    return null
   }
 
   return (
@@ -59,14 +63,14 @@ const LandingScreen = () => {
             <Text style={styles.textButtonTransparent}>Masuk</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={clearAsyncStorage}
           style={styles.buttonTransparent}
         >
           <View style={styles.elaraContainer}>
             <Text style={styles.textButtonTransparent}>Onboarding</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* <View style={styles.socialButtonContainer}>

@@ -7,7 +7,6 @@ import {
   Image,
   FlatList,
   Pressable,
-  Modal,
   StyleSheet,
 } from 'react-native'
 import Swiper from 'react-native-deck-swiper'
@@ -22,7 +21,10 @@ import useDropdownState from '../../hooks/useDropdownState'
 import FundingOptions from '../../components/FundingOptions/FundingOptions'
 import { Slider } from '@rneui/themed'
 import useMatching from '../../hooks/useMatching'
-import { Entypo } from '@expo/vector-icons'
+import { Entypo, FontAwesome } from '@expo/vector-icons'
+import useCustomFonts from '../../hooks/useCustomFonts'
+import ModalDetail from '../../components/Modal/ModalDetail'
+import SwiperCard from '../../components/Swiper/SwiperCard'
 
 const FormMatching = () => {
   const [isConfirmed, setIsConfirmed] = useState(false)
@@ -35,20 +37,13 @@ const FormMatching = () => {
     rangeUangSaku: [0, 1000],
   })
   const [isModalVisible, setIsModalVisible] = useState(false)
-
-  const clearFilters = () => {
-    setUserVector({
-      ipk: '',
-      semester: '',
-      jurusan: '',
-      tipePendanaan: '',
-      jenjang: '',
-      rangeUangSaku: '',
-    })
-  }
-
-  const { jenjangState, jurusanState, rangeUangSakuState } = useDropdownState()
-
+  const {
+    jenjangState,
+    jurusanState,
+    rangeUangSakuState,
+    reset,
+  } = useDropdownState()
+  const fontsLoaded = useCustomFonts()
   const {
     matchingBeasiswa,
     setMatchingBeasiswa,
@@ -60,6 +55,20 @@ const FormMatching = () => {
     handleSwipeRight,
     swiperRef,
   } = useMatching()
+
+  const clearFilters = () => {
+    setUserVector({
+      ipk: '',
+      semester: '',
+      jurusan: '',
+      tipePendanaan: '',
+      jenjang: '',
+      rangeUangSaku: '',
+    })
+    jurusanState.reset()
+    jenjangState.reset()
+    rangeUangSakuState.reset()
+  }
 
   const handleFindMatchingBeasiswa = (index) => {
     if (
@@ -96,67 +105,8 @@ const FormMatching = () => {
     setIsModalVisible(!isModalVisible)
   }
 
-  const renderCard = (card, index) => {
-    const beasiswa = card.beasiswa
-
-    if (!beasiswa) {
-      setIsConfirmed(false)
-      return
-    }
-
-    return (
-      <Pressable
-        // onPress={toggleModal}
-        key={beasiswa.id}
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'white',
-          height: 420,
-          position: 'relative',
-          borderRadius: 20,
-          marginTop: 60,
-          borderWidth: 1,
-          borderColor: '#E4E4E4',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
-      >
-        <Image
-          style={{
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
-            borderRadius: 20,
-          }}
-          resizeMode="contain"
-          source={{ uri: beasiswa.gambar }}
-        />
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            backgroundColor: 'transparant',
-            borderBottomRightRadius: 20,
-            borderBottomLeftRadius: 20,
-            padding: 15,
-          }}
-        >
-          <Text>{beasiswa.nama}</Text>
-          <Text>{beasiswa.tipePendanaan}</Text>
-          <TouchableOpacity onPress={toggleModal}>
-            <Text>Lihat</Text>
-          </TouchableOpacity>
-        </View>
-      </Pressable>
-    )
+  if (!fontsLoaded) {
+    return null
   }
 
   return (
@@ -171,18 +121,26 @@ const FormMatching = () => {
         >
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: 355,
-              paddingTop: 20,
-              alignItems: 'center',
+              flexDirection: 'column',
+              marginTop: 20,
+              marginHorizontal: 20,
+              gap: 8,
             }}
           >
             <HeaderComponent title="Matches" />
+            <Text
+              style={{
+                fontSize: 17,
+                fontWeight: '500',
+                lineHeight: 22,
+              }}
+            >
+              Ayoo Beaswan.. {'\n'}temukan beasiswa impian mu disini!!
+            </Text>
           </View>
           <Swiper
             cards={matchingBeasiswa}
-            renderCard={renderCard}
+            renderCard={SwiperCard}
             onSwipedAll={onSwipedAllCards}
             onSwiped={handleSwiped}
             ref={swiperRef}
@@ -202,12 +160,13 @@ const FormMatching = () => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-around',
+              alignItems: 'center',
               paddingBottom: 100,
             }}
           >
             <TouchableOpacity
               style={{
-                backgroundColor: 'red',
+                backgroundColor: '#E4E4E4',
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 40,
@@ -216,41 +175,42 @@ const FormMatching = () => {
               }}
               onPress={handleSwipeRight}
             >
-              <Entypo name="cross" size={30} />
+              <Entypo color={'#F07DEA'} name="cross" size={30} />
             </TouchableOpacity>
             <TouchableOpacity
               style={{
-                backgroundColor: 'green',
+                backgroundColor: '#F07DEA',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 40,
+                width: 80,
+                height: 80,
+              }}
+              onPress={handleSwipeLeft}
+            >
+              <Entypo color={'#FFFFFF'} name="heart" size={40} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#EEEEEE',
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 40,
                 width: 64,
                 height: 64,
               }}
-              onPress={handleSwipeLeft}
+              onPress={toggleModal}
             >
-              <Entypo name="heart" size={30} />
+              <FontAwesome color={'#F07DEA'} name="angle-double-up" size={30} />
             </TouchableOpacity>
           </View>
+
           {isModalVisible && (
-            <Modal
-              visible={isModalVisible}
-              animationType="slide"
-              transparent={true}
-              onRequestClose={toggleModal}
-            >
-              <View style={styles.modalContainer}>
-                <Text style={styles.modalText}>Modal Muncul</Text>
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={toggleModal}
-                >
-                  <Text style={styles.closeButtonText}>
-                    {selectedCard.beasiswa.nama}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Modal>
+            <ModalDetail
+              isModalVisible={isModalVisible}
+              toggleModal={toggleModal}
+              props={selectedCard.beasiswa}
+            />
           )}
         </View>
       ) : (
@@ -264,18 +224,29 @@ const FormMatching = () => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              width: 355,
-              paddingTop: 20,
+              marginTop: 20,
+              marginHorizontal: 40,
               alignItems: 'center',
             }}
           >
             <HeaderComponent title={'Filters'} />
-            <TouchableOpacity onPress={clearFilters}>
+            <TouchableOpacity
+              onPress={clearFilters}
+              style={{
+                height: 35,
+                width: 90,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#A460ED',
+                borderRadius: 20,
+              }}
+            >
               <Text
                 style={{
-                  fontSize: 17,
-                  fontWeight: 'bold',
-                  color: '#3F4BF2',
+                  fontSize: 19,
+                  color: 'white',
+                  fontFamily: 'Modernist-Bold',
                 }}
               >
                 Clear
@@ -308,7 +279,13 @@ const FormMatching = () => {
                       gap: 10,
                     }}
                   >
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#A460ED',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                    >
                       Tipe Pendanaan
                     </Text>
                     <FundingOptions
@@ -328,16 +305,40 @@ const FormMatching = () => {
                       gap: 10,
                     }}
                   >
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#A460ED',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                    >
                       Jurusan
                     </Text>
                     <DropDownPicker
-                      containerStyle={{ zIndex: 4 }}
+                      style={{
+                        zIndex: 4,
+                        borderColor: '#E8E6EA',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                      }}
+                      dropDownContainerStyle={{
+                        borderColor: '#E8E6EA',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                      }}
+                      searchContainerStyle={{
+                        borderColor: '#E8E6EA',
+                      }}
                       placeholder="Pilih Jurusan"
-                      placeholderStyle={{ color: 'grey' }}
+                      placeholderStyle={{
+                        color: 'grey',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                      textStyle={{
+                        fontFamily: 'Modernist-Regular',
+                      }}
                       searchable={true}
                       searchPlaceholder="Cari jurusan anda"
-                      searchContainerStyle={{}}
                       dropDownDirection="TOP"
                       maxHeight={100}
                       items={jurusanItems}
@@ -357,13 +358,36 @@ const FormMatching = () => {
                       gap: 10,
                     }}
                   >
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#A460ED',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                    >
                       Jenjang
                     </Text>
                     <DropDownPicker
-                      containerStyle={{ zIndex: 2 }}
+                      style={{
+                        zIndex: 2,
+                        borderColor: '#E8E6EA',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                      }}
+                      dropDownContainerStyle={{
+                        borderColor: '#E8E6EA',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                      }}
                       placeholder="Pilih Jenjang"
-                      placeholderStyle={{ color: 'grey' }}
+                      placeholderStyle={{
+                        color: 'grey',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                      textStyle={{
+                        fontFamily: 'Modernist-Regular',
+                      }}
+                      dropDownDirection="TOP"
                       items={jenjangItems}
                       open={jenjangState.open}
                       setOpen={jenjangState.setOpen}
@@ -381,10 +405,18 @@ const FormMatching = () => {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#A460ED',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                    >
                       Indeks Prestasi Kumulatif
                     </Text>
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{ fontSize: 15, fontFamily: 'Modernist-Regular' }}
+                    >
                       {userVector.ipk}
                     </Text>
                   </View>
@@ -393,10 +425,14 @@ const FormMatching = () => {
                     minimumValue={0}
                     maximumValue={4}
                     step={0.01}
-                    thumbTintColor="#3F4BF2"
-                    thumbStyle={{ width: 35, height: 35, borderRadius: 20 }}
-                    minimumTrackTintColor="#3F4BF2"
-                    maximumTrackTintColor="#A0A4A8"
+                    thumbTintColor="#F07DEA"
+                    thumbStyle={{
+                      width: 35,
+                      height: 35,
+                      borderRadius: 20,
+                    }}
+                    minimumTrackTintColor="#F07DEA"
+                    maximumTrackTintColor="#E8E6EA"
                     onValueChange={(value) => {
                       const roundedValue = Number(value.toFixed(2))
                       setUserVector((prevUserVector) => ({
@@ -412,10 +448,18 @@ const FormMatching = () => {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#A460ED',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                    >
                       Semester
                     </Text>
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{ fontSize: 15, fontFamily: 'Modernist-Regular' }}
+                    >
                       {userVector.semester}
                     </Text>
                   </View>
@@ -424,10 +468,10 @@ const FormMatching = () => {
                     minimumValue={0}
                     maximumValue={14}
                     step={1}
-                    thumbTintColor="#3F4BF2"
+                    thumbTintColor="#F07DEA"
                     thumbStyle={{ width: 35, height: 35, borderRadius: 20 }}
-                    minimumTrackTintColor="#3F4BF2"
-                    maximumTrackTintColor="#A0A4A8"
+                    minimumTrackTintColor="#F07DEA"
+                    maximumTrackTintColor="#E8E6EA"
                     onValueChange={(value) => {
                       setUserVector((prevUserVector) => ({
                         ...prevUserVector,
@@ -436,74 +480,41 @@ const FormMatching = () => {
                     }}
                   />
 
-                  {/* <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <TextInput
-                        style={{
-                          width: '40%',
-                          height: 40,
-                          borderWidth: 1,
-                          borderColor: '#ccc',
-                          paddingHorizontal: 10,
-                          borderRadius: 5,
-                        }}
-                        value={userVector.rangeUangSaku[0].toString()}
-                        onChangeText={(value) => {
-                          setUserVector((prevUserVector) => ({
-                            ...prevUserVector,
-                            rangeUangSaku: [
-                              Number(value),
-                              prevUserVector.rangeUangSaku[1],
-                            ],
-                          }))
-                        }}
-                        keyboardType="numeric"
-                        placeholder="Minimum Value"
-                      />
-                      <TextInput
-                        style={{
-                          width: '40%',
-                          height: 40,
-                          borderWidth: 1,
-                          borderColor: '#ccc',
-                          paddingHorizontal: 10,
-                          borderRadius: 5,
-                        }}
-                        value={userVector.rangeUangSaku[1].toString()}
-                        onChangeText={(value) => {
-                          setUserVector((prevUserVector) => ({
-                            ...prevUserVector,
-                            rangeUangSaku: [
-                              prevUserVector.rangeUangSaku[0],
-                              Number(value),
-                            ],
-                          }))
-                        }}
-                        keyboardType="numeric"
-                        placeholder="Maximum Value"
-                      />
-        
-                      {console.log(userVector.rangeUangSaku.join('-'))}
-                    </View> */}
-
                   <View
                     style={{
                       flexDirection: 'column',
                       gap: 10,
                     }}
                   >
-                    <Text style={{ fontSize: 15, fontWeight: '700' }}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#A460ED',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                    >
                       Range Uang Saku
                     </Text>
                     <DropDownPicker
-                      containerStyle={{ zIndex: 1 }}
+                      style={{
+                        zIndex: 1,
+                        borderColor: '#E8E6EA',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                      }}
+                      dropDownContainerStyle={{
+                        borderColor: '#E8E6EA',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                      }}
                       placeholder="Pilih range uang saku"
-                      placeholderStyle={{ color: 'grey' }}
+                      placeholderStyle={{
+                        color: 'grey',
+                        fontFamily: 'Modernist-Bold',
+                      }}
+                      textStyle={{
+                        fontFamily: 'Modernist-Regular',
+                      }}
                       items={rangeUangSakuItems}
                       open={rangeUangSakuState.open}
                       setOpen={rangeUangSakuState.setOpen}
@@ -524,7 +535,7 @@ const FormMatching = () => {
                       paddingHorizontal: 72,
                       borderRadius: 4,
                       elevation: 3,
-                      backgroundColor: '#3F4BF2',
+                      backgroundColor: '#F07DEA',
                       borderRadius: 15,
                       width: 315,
                       height: 55,
@@ -537,11 +548,10 @@ const FormMatching = () => {
                   >
                     <Text
                       style={{
-                        fontSize: 17,
-                        lineHeight: 21,
-                        fontWeight: 'bold',
+                        fontSize: 20,
                         letterSpacing: 0.25,
                         color: 'white',
+                        fontFamily: 'Modernist-Bold',
                       }}
                     >
                       Konfirmasi
@@ -556,30 +566,5 @@ const FormMatching = () => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  modalText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 20,
-  },
-  closeButton: {
-    padding: 10,
-    backgroundColor: 'blue',
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-})
 
 export default FormMatching

@@ -12,7 +12,7 @@ const useProfileData = () => {
   const [perguruanTinggi, setPerguruanTinggi] = useState('')
   const [semester, setSemester] = useState('')
   const [jurusan, setJurusan] = useState('')
-  const { user } = useContext(AuthContext)
+  const { user, getUser } = useContext(AuthContext)
 
 
   useEffect(() => {
@@ -109,6 +109,7 @@ const useProfileData = () => {
 
   const handleEdit = () => {
     setIsEditing(true)
+    console.log();
   }
 
   const handleSave = async () => {

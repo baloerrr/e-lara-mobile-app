@@ -254,7 +254,6 @@ const jurusanItems = [
   },
   { label: 'Agroteknologi', value: 'agroteknologi' },
   { label: 'Teknologi Pangan', value: 'teknologi pangan' },
-  { label: 'Rekayasa Pertanian', value: 'rekayasa pertanian' },
   { label: 'Peternakan', value: 'peternakan' },
   { label: 'Agroeteknologi', value: 'agroeteknologi' },
   { label: 'Kehutanan', value: 'kehutanan' },
@@ -426,7 +425,6 @@ const jurusanItems = [
     label: 'Pendidikan Kepelatihan Keolahragaan',
     value: 'pendidikan kepelatihan keolahragaan',
   },
-  { label: 'IlmuKeolahragaan', value: 'ilmu keolahragaan' },
   { label: 'Olahraga Rekreasi', value: 'olahraga rekreasi' },
   {
     label: 'Kepelatihan Kecabangan Olahraga',

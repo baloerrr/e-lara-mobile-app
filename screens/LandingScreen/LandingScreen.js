@@ -25,15 +25,14 @@ export const styles = StyleSheet.create({
     marginTop: 25,
   },
   title: {
-    fontWeight: 'bold',
     fontSize: 40,
     letterSpacing: 0,
     textAlign: 'center',
     lineHeight: 30,
     color: 'white',
-    fontWeight: '800',
     lineHeight: 36,
-    paddingTop:8
+    paddingTop:8,
+    fontFamily: 'Modernist-Bold'
   },
 
   subtitle: {
@@ -44,11 +43,14 @@ export const styles = StyleSheet.create({
     letterSpacing: 1,
     lineHeight: 22,
     marginTop: 10,
+    fontFamily: 'Modernist-Bold'
+
   },
 
   textBlue: {
     color: '#6E77EE',
     textAlign: 'center',
+    fontFamily: 'Modernist-Bold'
   },
   buttonContainer: {
     flexDirection: 'column',
@@ -75,18 +77,18 @@ export const styles = StyleSheet.create({
   textButtonPink: {
     fontSize: 20,
     lineHeight: 21,
-    fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
     textAlign: 'center',
+    fontFamily: 'Modernist-Bold'
   },
   textButtonTransparent: {
     fontSize: 20,
     lineHeight: 21,
-    fontWeight: 'bold',
     letterSpacing: 0.25,
     color: '#6E77EE',
     textAlign: 'center',
+    fontFamily: 'Modernist-Bold'
   },
 
   elaraContainer: {

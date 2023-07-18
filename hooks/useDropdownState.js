@@ -7,45 +7,44 @@ const useDropdownState = () => {
   const [openJenjang, setOpenJenjang] = useState(false)
   const [valueJenjang, setValueJenjang] = useState(null)
 
-  const [openSemester, setOpenSemester] = useState(false)
-  const [valueSemester, setValueSemester] = useState(null)
-
-  const [openTipePendanaan, setOpenTipePendanaan] = useState(false)
-  const [valueTipePendanaan, setValueTipePendanaan] = useState(null)
-
   const [openRangeUangSaku, setOpenRangeUangSaku] = useState(false)
   const [valueRangeUangSaku, setValueRangeUangSaku] = useState(null)
 
+  const resetJurusan = () => {
+    setValueJurusan(null)
+    setOpenJurusan(false)
+  }
+
+  const resetJenjang = () => {
+    setValueJenjang(null)
+    setOpenJenjang(false)
+  }
+
+  const resetRangeUangSaku = () => {
+    setValueRangeUangSaku(null)
+    setOpenRangeUangSaku(false)
+  }
   return {
     jurusanState: {
       open: openJurusan,
       value: valueJurusan,
       setOpen: setOpenJurusan,
       setValue: setValueJurusan,
+      reset: resetJurusan
     },
     jenjangState: {
       open: openJenjang,
       value: valueJenjang,
       setOpen: setOpenJenjang,
       setValue: setValueJenjang,
-    },
-    semesterState: {
-      open: openSemester,
-      value: valueSemester,
-      setOpen: setOpenSemester,
-      setValue: setValueSemester,
-    },
-    tipePendanaanState: {
-      open: openTipePendanaan,
-      value: valueTipePendanaan,
-      setOpen: setOpenTipePendanaan,
-      setValue: setValueTipePendanaan,
+      reset: resetJenjang
     },
     rangeUangSakuState: {
       open: openRangeUangSaku,
       value: valueRangeUangSaku,
       setOpen: setOpenRangeUangSaku,
       setValue: setValueRangeUangSaku,
+      reset: resetRangeUangSaku
     },
   }
 }

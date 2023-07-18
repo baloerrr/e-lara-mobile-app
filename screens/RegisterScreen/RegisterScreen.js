@@ -5,87 +5,160 @@ const width = Dimensions.get('window').width
 
 export const styles = StyleSheet.create({
   container: {
-    width: width,
-    height: height,
-    backgroundColor: 'white',
+    flex: 1,
+    backgroundColor: '#A460ED',
   },
 
   registerContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 20,
+    gap: 15,
     marginTop: 15,
   },
 
-  registerText: {
-    fontWeight: 'bold',
+  title: {
     fontSize: 36,
     color: 'white',
-    paddingTop: 40,
+    marginTop: 15,
+    fontFamily: 'Modernist-Bold',
+    textAlign: 'center'
   },
 
-  titleContainer: {},
+  subtitle: {
+    fontSize: 15,
+    color: 'white',
+    fontFamily: 'Modernist-Regular',
+    textAlign: 'center'
+  },
 
   formContainer: {
     flexDirection: 'column',
-    gap: 25,
+    gap: 20,
     alignItems: 'center',
     width: '100%',
-    paddingTop: 30,
+    marginTop: 10
   },
-  formControl: {
+  formGroup: {
     flexDirection: 'row',
     gap: 30,
     justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+
+  icon: {
+    position:'absolute',
+    zIndex: 2,
+    marginLeft: 28,
   },
 
   label: {
     textAlign: 'left',
   },
 
+  googleButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
   input: {
     paddingVertical: 7,
     paddingHorizontal: 10,
     backgroundColor: '#f8faf9',
-    borderRadius: 10,
+    borderRadius: 20,
     width: 320,
     height: 60,
+    fontFamily: 'Modernist-Regular',
+    paddingLeft: 60
   },
 
-  buttonBlue: {
+  inputPhone: {
+    borderRadius: 20, 
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    backgroundColor: '#f8faf9',
+    height: 65,
+    width: 320,
+    paddingHorizontal: 10,
+  },
+
+  inputDate: {
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    backgroundColor: '#f8faf9',
+    borderRadius: 20,
+    width: 320,
+    height: 60,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingLeft: 60
+  },
+
+  selectedStartDate: {
+    color: 'black', 
+    fontFamily: 'Modernist-Regular'
+  },
+
+  notSelectedStartDate: {
+    color: 'grey', 
+    fontFamily: 'Modernist-Regular'
+  },
+
+  buttonPink: {
     width: 320,
     height: 55,
     elevation: 3,
-    backgroundColor: '#6E77EE',
-    borderRadius: 15,
+    backgroundColor: '#F07DEA',
+    borderRadius: 20,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  textButtonBlue: {
+  buttonWhite: {
+    width: 320,
+    height: 55,
+    elevation: 3,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  textButtonPink: {
     fontSize: 24,
     lineHeight: 21,
-    fontWeight: 'bold',
     paddingTop: 3,
     letterSpacing: 0.25,
     color: 'white',
+    fontFamily: 'Modernist-Bold'
+  },
+
+  textButtonWhite: {
+    fontSize: 18,
+    letterSpacing: 0.25,
+    fontFamily: 'Modernist-Bold',
+    color: '#A460ED',
+    paddingLeft: 30
   },
 
   loginLink: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 3,
-    marginTop: -10,
+    marginTop: -5
   },
 
   loginText: {
     fontSize: 15,
+    fontFamily: 'Modernist-Regular',
+    color: 'white'
   },
 
   textLinkLogin: {
     color: 'blue',
     fontSize: 15,
+    fontFamily: 'Modernist-Regular',
   },
   imagepreviewcontainer: {
     alignItems: 'center',
@@ -112,21 +185,13 @@ export const styles = StyleSheet.create({
     fontSize: 25,
     color: '#111',
   },
-  inputBtn: {
-    paddingVertical: 7,
-    paddingHorizontal: 10,
-    backgroundColor: '#f8faf9',
-    borderRadius: 10,
-    width: 320,
-    height: 60,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
+
   centeredView: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   modalView: {
     margin: 20,
     backgroundColor: '#080516',

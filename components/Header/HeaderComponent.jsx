@@ -1,22 +1,21 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react'
+import useCustomFonts from '../../hooks/useCustomFonts'
 
 const HeaderComponent = (props) => {
+  const fontsLoaded = useCustomFonts()
+
+  if (!fontsLoaded) {
+    return null
+  }
   return (
-    <View
-      style={{
-        backgroundColor: '#3F4BF2',
-        padding: 10,
-        paddingRight: 15,
-        borderTopRightRadius: 35,
-        borderBottomRightRadius: 35,
-      }}
-    >
+    <View>
       <Text
         style={{
-          fontSize: 40,
-          fontWeight: 'bold',
-          color: '#E4E4E4',
+          fontSize: 30,
+          color: '#A460ED',
+          textAlign: 'left',
+          fontFamily: 'Modernist-Bold',
         }}
       >
         {props.title}

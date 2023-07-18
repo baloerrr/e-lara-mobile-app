@@ -1,96 +1,150 @@
-import { StyleSheet, Dimensions } from 'react-native'
-
-const height = Dimensions.get('window').height
-const width = Dimensions.get('window').width
+import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   container: {
-    height: height,
-    width: width,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    flexDirection: 'column',
+    flex: 1,
   },
 
-  imageContainer: {
-    width: 390,
-    height: 235,
-    flexDirection: 'column',
+  loginContainer: {
+    flex: 1,
+  },
+
+  headerContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 10,
   },
 
-  textMasuk: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
+  title: {
     color: 'white',
-    fontSize: 40,
-    paddingRight: 10,
-    fontWeight: 'bold',
+    fontSize: 30,
+    fontFamily: 'Modernist-Bold',
+    marginTop: 30,
+    lineHeight: 50,
+    letterSpacing: 1,
+  },
+
+  subtitle: {
+    color: 'white',
+    fontSize: 18,
+    fontFamily: 'Modernist-Regular',
   },
 
   formContainer: {
-    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 15,
-    gap: 15,
+    marginTop: 10,
+  },
+
+  title2: {
+    color: '#A460ED',
+    fontSize: 30,
+    paddingRight: 10,
+    fontFamily: 'Modernist-Bold',
+    marginBottom: 20,
+    letterSpacing: 1,
+  },
+
+  formGroup: {
+    marginBottom: 25,
+  },
+
+  label: {
+    color: '#A460ED',
+    marginBottom: 5,
+    fontFamily: 'Modernist-regular',
+  },
+
+  icon: {
+    position: 'absolute',
+    zIndex: 2,
+    marginHorizontal: 15,
   },
 
   inputContainer: {
-    flexDirection: 'column',
-    gap: 20,
-    paddingTop: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-
   input: {
     paddingVertical: 7,
     paddingHorizontal: 10,
     backgroundColor: '#f8faf9',
-    borderRadius: 10,
+    borderRadius: 20,
     width: 320,
     height: 55,
     fontSize: 15,
+    paddingLeft: 50,
   },
 
   buttonContainer: {
-    paddingTop: 130,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
-  buttonBlue: {
+  buttonPink: {
     width: 320,
     height: 55,
     elevation: 3,
-    backgroundColor: '#6E77EE',
+    backgroundColor: '#F07DEA',
     borderRadius: 15,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  textButtonBlue: {
+  textButtonPink: {
     fontSize: 24,
     lineHeight: 21,
-    fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
+    fontFamily: 'Modernist-Bold',
+  },
+
+  googleButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+
+  buttonWhite: {
+    width: 320,
+    height: 55,
+    elevation: 3,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  textButtonWhite: {
+    fontSize: 18,
+    letterSpacing: 0.25,
+    fontFamily: 'Modernist-Bold',
+    color: '#A460ED',
   },
 
   registerLink: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 3,
-    paddingTop: 100,
+    marginTop: 15,
+    gap: 5,
   },
 
   registerText: {
     fontSize: 15,
+    fontFamily: 'Modernist-Regular',
+  },
+
+  orText: {
+    fontFamily: 'Modernist-Regular',
+    marginTop: 15,
   },
 
   textLinkRegister: {
     color: 'blue',
     fontSize: 15,
+    fontFamily: 'Modernist-Regular',
   },
 })
+

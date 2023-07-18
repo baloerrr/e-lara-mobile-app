@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import {
   View,
   Text,
-  Alert,
   TextInput,
   ScrollView,
   SafeAreaView,
@@ -32,10 +31,6 @@ const ProfileScreen = () => {
     setPerguruanTinggi,
     setSemester,
   } = useProfileData()
-
-  useEffect(() => {
-    console.log(namaLengkap)
-  }, [namaLengkap])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -158,7 +153,7 @@ const ProfileScreen = () => {
           >
             <Text style={styles.text}>Nama</Text>
             <TextInput
-              style={styles.input}
+              style={!isEditing ? styles.input : styles.inputSetEdit}
               value={namaLengkap}
               onChangeText={setNamaLengkap}
               editable={isEditing}
@@ -166,7 +161,7 @@ const ProfileScreen = () => {
 
             <Text style={styles.text}>Perguruan Tinggi</Text>
             <TextInput
-              style={styles.input}
+              style={!isEditing ? styles.input : styles.inputSetEdit}
               value={perguruanTinggi}
               onChangeText={setPerguruanTinggi}
               editable={isEditing}
@@ -175,7 +170,7 @@ const ProfileScreen = () => {
 
             <Text style={styles.text}>Semester</Text>
             <TextInput
-              style={styles.input}
+              style={!isEditing ? styles.input : styles.inputSetEdit}
               value={semester}
               onChangeText={setSemester}
               editable={isEditing}
@@ -184,7 +179,7 @@ const ProfileScreen = () => {
 
             <Text style={styles.text}>Jurusan</Text>
             <TextInput
-              style={styles.input}
+              style={!isEditing ? styles.input : styles.inputSetEdit}
               value={jurusan}
               onChangeText={setJurusan}
               editable={isEditing}
@@ -193,7 +188,7 @@ const ProfileScreen = () => {
 
             <Text style={styles.text}>Nomor Telepon</Text>
             <TextInput
-              style={styles.input}
+              style={!isEditing ? styles.input : styles.inputSetEdit}
               value={noHandphone}
               onChangeText={setNoHandphone}
               editable={isEditing}
@@ -250,6 +245,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     borderWidth: 1,
     borderColor: '#A460ED',
+  },
+
+  inputSetEdit: {
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    width: 320,
+    height: 55,
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: '#E8E6EA',
   },
 
   buttonPink: {

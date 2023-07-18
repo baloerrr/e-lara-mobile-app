@@ -5,18 +5,20 @@ import {
   ActivityIndicator,
   Pressable,
   Modal,
-  ImageBackground,
+  SafeAreaView,
 } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { styles } from './RegisterScreen'
 import { useNavigation } from '@react-navigation/native'
 import Input from '../../components/FormInput/Input'
 import InputPhone from '../../components/FormInput/InputPhone'
-import ModalAlert from '../../components/Modal/ModalAlert'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { AuthContext } from '../../hooks/AuthProvider'
 import DatePicker from 'react-native-modern-datepicker'
 import { getFormatedDate } from 'react-native-modern-datepicker'
+import useCustomFonts from '../../hooks/useCustomFonts'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import ModalAlert from '../../components/Modal/ModalAlert.jsx'
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('')
@@ -25,14 +27,23 @@ const RegisterScreen = () => {
   const [tempatLahir, setTempatLahir] = useState('')
   const [tanggalLahir, setTanggalLahir] = useState(new Date())
   const [noHandphone, setNoHandphone] = useState('')
-  // const [imageUri, setImageUri] = useState(null)
-
-  const [message, setMessage] = useState('')
-
   const navigation = useNavigation()
-
-  const { register, isLoading } = useContext(AuthContext)
-
+  const {
+    register,
+    isLoading,
+    getUser,
+    token,
+    promptAsync,
+    user,
+    isError,
+    isWarning,
+    isSuccess,
+    title,
+    message,
+    modalVisible,
+    setModalVisible,
+    setIsLoading,
+  } = useContext(AuthContext)
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
   const today = new Date()
   const startDate = getFormatedDate(
@@ -41,6 +52,7 @@ const RegisterScreen = () => {
   )
   const [selectedStartDate, setSelectedStartDate] = useState('')
   const [startedDate, setStartedDate] = useState('12/12/2023')
+  const fontsLoaded = useCustomFonts()
 
   function handleChangeStartDate(propDate) {
     setStartedDate(propDate)
@@ -62,15 +74,34 @@ const RegisterScreen = () => {
 
     try {
       await register(registerData)
-      setEmail('')
-      setPassword('')
-      setNamaLengkap('')
-      setTempatLahir('')
-      setTanggalLahir('')
-      setNoHandphone('')
+
+      // setEmail('')
+      // setPassword('')
+      // setNamaLengkap('')
+      // setTempatLahir('')
+      // setTanggalLahir('')
+      // setNoHandphone('')
     } catch (error) {
       console.log(error.message)
     }
+  }
+
+  const handleClose = () => {
+    setModalVisible(false)
+    setIsLoading(false)
+  }
+
+  let messageType = ''
+  if (isError) {
+    messageType = 'error'
+  } else if (isWarning) {
+    messageType = 'warning'
+  } else if (isSuccess) {
+    messageType = 'success'
+  }
+
+  if (!fontsLoaded) {
+    return null
   }
 
   return (
@@ -78,17 +109,19 @@ const RegisterScreen = () => {
       contentContainerStyle={styles.container}
       keyboardShouldPersistTaps="handled"
     >
-      <ImageBackground
-        source={require('../../assets/E-Lara/register_background.png')}
-        style={styles.container}
-      >
+      <SafeAreaView style={styles.container}>
         <View style={styles.registerContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.registerText}>Daftar Akun</Text>
+            <Text style={styles.title}>Daftar Akun</Text>
           </View>
           <View style={styles.formContainer}>
-            <View style={styles.formControl}>
-              {/* <Text>Email</Text> */}
+            <View style={styles.formGroup}>
+              <FontAwesome
+                name="envelope"
+                size={21}
+                color="#F07DEA"
+                style={styles.icon}
+              />
               <Input
                 onChangeText={(email) => setEmail(email)}
                 style={styles.input}
@@ -96,8 +129,13 @@ const RegisterScreen = () => {
                 value={email}
               />
             </View>
-            <View style={styles.formControl}>
-              {/* <Text>Password</Text> */}
+            <View style={styles.formGroup}>
+              <FontAwesome
+                name="lock"
+                size={25}
+                color="#F07DEA"
+                style={styles.icon}
+              />
               <Input
                 onChangeText={(password) => setPassword(password)}
                 style={styles.input}
@@ -106,8 +144,13 @@ const RegisterScreen = () => {
                 secureTextEntry={true}
               />
             </View>
-            <View style={styles.formControl}>
-              {/* <Text>Nama Lengkap</Text> */}
+            <View style={styles.formGroup}>
+              <FontAwesome
+                name="user"
+                size={25}
+                color="#F07DEA"
+                style={styles.icon}
+              />
               <Input
                 onChangeText={(namaLengkap) => setNamaLengkap(namaLengkap)}
                 style={styles.input}
@@ -115,8 +158,13 @@ const RegisterScreen = () => {
                 value={namaLengkap}
               />
             </View>
-            <View style={styles.formControl}>
-              {/* <Text>Tempat Lahir</Text> */}
+            <View style={styles.formGroup}>
+              <MaterialIcons
+                name="place"
+                size={25}
+                color="#F07DEA"
+                style={styles.icon}
+              />
               <Input
                 onChangeText={(tempatLahir) => setTempatLahir(tempatLahir)}
                 style={styles.input}
@@ -124,16 +172,23 @@ const RegisterScreen = () => {
                 value={tempatLahir}
               />
             </View>
-            <View style={styles.formControl}>
-              {/* <Text>Tanggal Lahir</Text> */}
+            <View style={styles.formGroup}>
+              <MaterialIcons
+                name="date-range"
+                size={25}
+                color="#F07DEA"
+                style={styles.icon}
+              />
               <View>
                 <TouchableOpacity
-                  style={styles.inputBtn}
+                  style={styles.inputDate}
                   onPress={handleOnPressStartDate}
                 >
                   <Text
                     style={
-                      selectedStartDate ? { color: 'black' } : { color: 'grey' }
+                      selectedStartDate
+                        ? styles.selectedStartDate
+                        : styles.notSelectedStartDate
                     }
                   >
                     {selectedStartDate ? selectedStartDate : 'Tanggal lahir'}
@@ -141,24 +196,22 @@ const RegisterScreen = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.formControl}>
-              {/* <Text>No Handphone</Text> */}
+            <View style={styles.formGroup}>
               <InputPhone
                 onChangeText={(noHandphone) => setNoHandphone(noHandphone)}
                 defaultValue={noHandphone}
-                containerStyle={{ borderRadius: 10, paddingHorizontal: 10 }}
+                containerStyle={styles.inputPhone}
               />
             </View>
-            <View></View>
             <View>
               <TouchableOpacity
                 onPress={handleRegister}
-                style={styles.buttonBlue}
+                style={styles.buttonPink}
               >
                 {isLoading ? (
                   <ActivityIndicator size="large" color="white" />
                 ) : (
-                  <Text style={styles.textButtonBlue}>Daftar</Text>
+                  <Text style={styles.textButtonPink}>Daftar</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -172,8 +225,53 @@ const RegisterScreen = () => {
                 <Text style={styles.textLinkLogin}>masuk</Text>
               </Pressable>
             </View>
+            <Text
+              style={{
+                marginTop: -10,
+                fontFamily: 'Modernist-Regular',
+                fontSize: 15,
+                color: 'white',
+              }}
+            >
+              Atau dengan
+            </Text>
+            <View style={styles.googleButtonContainer}>
+              <FontAwesome
+                name="google"
+                color="#A460ED"
+                size={30}
+                style={styles.icon}
+              />
+              <TouchableOpacity
+                onPress={
+                  token
+                    ? getUser
+                    : () =>
+                        promptAsync({ useProxy: false, showInRecents: true })
+                }
+                style={styles.buttonWhite}
+              >
+                {isLoading ? (
+                  <ActivityIndicator size="large" color="white" />
+                ) : (
+                  <Text style={styles.textButtonWhite}>
+                    Lanjutkan Dengan Google
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
-          {message ? <ModalAlert /> : ''}
+          {modalVisible ? (
+            <ModalAlert
+              visible={modalVisible}
+              onRequestClose={handleClose}
+              title={title}
+              message={message}
+              type={messageType}
+            />
+          ) : (
+            ''
+          )}
         </View>
 
         <Modal
@@ -206,7 +304,7 @@ const RegisterScreen = () => {
             </View>
           </View>
         </Modal>
-      </ImageBackground>
+      </SafeAreaView>
     </KeyboardAwareScrollView>
   )
 }

@@ -1,9 +1,16 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import useCustomFonts from '../../hooks/useCustomFonts'
 
 const FundingOptions = ({ selectedOption, onOptionChange }) => {
   const handleOptionPress = (option) => {
     onOptionChange(option)
+  }
+
+  const fontsLoaded = useCustomFonts()
+
+  if (!fontsLoaded) {
+    return null
   }
 
   return (
@@ -50,7 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     borderRadius: 16,
-    borderColor: '#B7BAC3',
+    borderColor: 'white',
     alignItems: 'center',
     backgroundColor: 'white',
   },
@@ -63,6 +70,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderTopStartRadius: 15,
     borderBottomStartRadius: 15,
+    elevation: 3,
   },
   optionButton2: {
     flex: 1,
@@ -70,20 +78,31 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     justifyContent: 'center',
+    elevation: 3,
     alignItems: 'center',
     borderTopEndRadius: 15,
     borderBottomEndRadius: 15,
   },
   selectedOptionButton: {
-    backgroundColor: '#3F4BF2',
+    backgroundColor: '#A460ED',
   },
   optionText: {
     fontSize: 18,
-    color: '#3F4BF2',
-    fontWeight: '700',
+    color: '#A460ED',
+    fontFamily: 'Modernist-Bold',
   },
   selectedOptionText: {
     color: 'white',
+  },
+  separator: {
+    backgroundColor: '#EEEEEE',
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  separatorText: {
+    fontSize: 30,
   },
 })
 
