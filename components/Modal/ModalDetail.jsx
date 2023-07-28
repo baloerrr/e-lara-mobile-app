@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Linking,
 } from 'react-native'
 import React from 'react'
 import { useState } from 'react'
@@ -14,7 +15,6 @@ import ModalConfirm from './ModalConfirm'
 const ModalDetail = ({
   isModalVisible,
   toggleModal,
-  handleOpenBrowser,
   FontAwesome,
   onDelete,
   props,
@@ -23,13 +23,6 @@ const ModalDetail = ({
 
   const handleConfirmVisible = () => {
     setIsModalConfirmVisible(true)
-  }
-
-  const handleDelete = () => {
-    onDelete(props)
-    setTimeout(() => {
-      toggleModal()
-    }, 1000)
   }
 
   const handleConfirm = () => {
@@ -42,6 +35,17 @@ const ModalDetail = ({
 
   const handleCancel = () => {
     setIsModalConfirmVisible(false)
+  }
+
+  const handleOpenBrowser = async () => {
+    const url = props.url
+    const supported = await Linking.canOpenURL(url)
+
+    if (supported) {
+      await Linking.openURL(url)
+    } else {
+      console.log('Cannot open URL')
+    }
   }
 
   return (
@@ -57,7 +61,7 @@ const ModalDetail = ({
             <Text
               style={{
                 fontSize: 32,
-                color: '#A460ED',
+                color: 'black',
                 letterSpacing: 0.5,
                 fontFamily: 'Modernist-Bold',
                 width: 250,
@@ -97,7 +101,7 @@ const ModalDetail = ({
             <Text
               style={{
                 fontSize: 20,
-                color: '#A460ED',
+                color: 'black',
                 lineHeight: 23,
                 letterSpacing: 0.5,
                 fontFamily: 'Modernist-Bold',
@@ -120,7 +124,7 @@ const ModalDetail = ({
               style={{
                 textAlign: 'justify',
                 fontSize: 20,
-                color: '#A460ED',
+                color: 'black',
                 letterSpacing: 0.5,
                 fontFamily: 'Modernist-Bold',
               }}
@@ -135,16 +139,17 @@ const ModalDetail = ({
                   fontFamily: 'Modernist-Regular',
                 }}
               >
-                Bank Indonesia mendorong komunitas penerima Beasiswa BI yang
-                juga disebut sebagai Generasi Baru Indonesia (GenBI) sebagai
-                pemimpin muda yang dapat mengakselerasi ekonomi dan keuangan
-                digital bagi pertumbuhan ekonomi negeri. Hal tersebut diwujudkan
-                melalui kegiatan GenBI Leadership Camp 2021 yang diselenggarakan
-                secara virtual pada 20-21 November 2021.
+                {props.deskripsi}
               </Text>
             </Text>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginBottom: 130,
+              }}
+            >
               <Image
                 source={{ uri: props.gambar }}
                 resizeMode="contain"
@@ -163,13 +168,16 @@ const ModalDetail = ({
                 flexDirection: 'column',
                 justifyContent: 'center',
                 gap: 5,
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
               }}
             >
               <TouchableOpacity
-                style={styles.closeButton}
+                style={styles.detailButton}
                 onPress={handleOpenBrowser}
               >
-                <Text style={styles.closeButtonText}>Selengkapnya</Text>
+                <Text style={styles.detailButtonText}>Selengkapnya</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -196,8 +204,10 @@ const ModalDetail = ({
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     backgroundColor: 'white',
+    position: 'relative',
+    paddingBottom: 50,
   },
   modalText: {
     fontSize: 20,
@@ -210,17 +220,38 @@ const styles = StyleSheet.create({
     gap: 15,
     marginTop: 20,
   },
-  closeButton: {
+
+  detailButton: {
     width: '100%',
     height: 50,
     elevation: 3,
-    backgroundColor: '#F07DEA',
+    backgroundColor: '#A661ED',
     borderRadius: 20,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   closeButtonText: {
+    fontSize: 16,
+    color: '#A661ED',
+    textAlign: 'center',
+    fontFamily: 'Modernist-Bold',
+  },
+
+  closeButton: {
+    width: '100%',
+    height: 50,
+    elevation: 3,
+    backgroundColor: '#E6E6E6',
+    opacity: 0.5,
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  detailButtonText: {
     fontSize: 16,
     color: 'white',
     textAlign: 'center',

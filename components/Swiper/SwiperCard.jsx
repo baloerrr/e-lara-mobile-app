@@ -19,7 +19,6 @@ const SwiperCard = (card, index) => {
         height: 420,
         position: 'relative',
         borderRadius: 20,
-        marginTop: 80,
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
@@ -29,6 +28,7 @@ const SwiperCard = (card, index) => {
         shadowRadius: 3.84,
         elevation: 5,
         overflow: 'hidden',
+        marginTop: 80,
       }}
     >
       <Image

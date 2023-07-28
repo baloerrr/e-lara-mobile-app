@@ -4,7 +4,7 @@ import {
   calculateCosineSimilarity,
   calculateMatchingValues,
 } from '../lib/index'
-import { Alert } from 'react-native'
+import { Alert, ToastAndroid } from 'react-native'
 
 const useMatching = () => {
   const [matchingBeasiswa, setMatchingBeasiswa] = useState([])
@@ -73,54 +73,42 @@ const useMatching = () => {
     return top10Beasiswa
   }
 
-  const handleSwipeLeft = () => {
+  const handleSwipeLeft = async () => {
     if (selectedCard) {
       const beasiswaId = selectedCard.beasiswa.id;
       const currentUser = firebase.auth().currentUser.uid
-  
-      // Cek keberadaan kartu di koleksi "savedBeasiswa"
-      firebase
-        .firestore()
+      const timeStamps = firebase.firestore.FieldValue.serverTimestamp()
+
+      try {
+       const snapshot = firebase.firestore()
         .collection('savedBeasiswa')
         .where('id', '==', beasiswaId)
-        .get()
-        .then((querySnapshot) => {
-          if (querySnapshot.size > 0) {
-            // Kartu sudah ada di dalam database
-            Alert.alert('Peringatan', 'Kartu ini sudah tersimpan');
-          } else {
+        .where('userId', '==', currentUser)
+        .get();
 
-            const beasiswaData = {
-              ...selectedCard.beasiswa,
-              userId: currentUser
-            }
-            firebase
-              .firestore()
-              .collection('savedBeasiswa')
-              .add(beasiswaData)
-              .then(() => {
-                console.log('Card berhasil disimpan ke database');
-                swiperRef.current.swipeLeft();
-              })
-              .catch((error) => {
-                console.log('Gagal menyimpan card ke database:', error.message);
-              });
-          }
-        })
-        .catch((error) => {
-          console.log('Gagal memeriksa kartu di database:', error.message);
-        });
+        if(snapshot > 0) {
+          Alert.alert('Peringatan', 'Kartu ini sudah tersimpan');
+        }  else {
+          const beasiswaData = {
+            ...selectedCard.beasiswa,
+            userId: currentUser,
+            timeStamps: firebase.firestore.FieldValue.serverTimestamp(),
+          };
+  
+          await firebase.firestore().collection('savedBeasiswa').add(beasiswaData);
+          ToastAndroid.show('Kartu tersimpan selama 24 jam', ToastAndroid.SHORT);
+          swiperRef.current.swipeLeft();
+        }
+      } catch (error) {
+        console.log('Gagal menyimpan card ke database:', error.message);
+      }
     }
   };
-  
-  
-  
 
   const handleSwipeRight = () => {
     swiperRef.current.swipeRight()
   }
 
-  
   return {
     matchingBeasiswa,
     setMatchingBeasiswa,

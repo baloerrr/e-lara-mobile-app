@@ -8,10 +8,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     gap: 30,
-    backgroundColor: '#A460ED',
+    backgroundColor: 'white',
   },
-
-  imageContainer: {},
 
   image: {
     width: 332,
@@ -29,7 +27,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     lineHeight: 30,
-    color: 'white',
+    color: 'black',
     lineHeight: 36,
     paddingTop:8,
     fontFamily: 'Modernist-Bold'
@@ -39,7 +37,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     fontWeight: 400,
-    color: 'white',
+    color: 'black',
     letterSpacing: 1,
     lineHeight: 22,
     marginTop: 10,
@@ -62,16 +60,16 @@ export const styles = StyleSheet.create({
     width: 295,
     height: 50,
     elevation: 3,
-    backgroundColor: '#F07DEA',
+    backgroundColor: '#A460ED',
     borderRadius: 20,
   },
 
   buttonTransparent: {
     backgroundColor: '#E4E4E4',
+    opacity: 0.5,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#6E77EE',
-    elevation: 3,
+    borderColor: '#E4E4E4',
+    elevation: 1,
   },
 
   textButtonPink: {
@@ -86,7 +84,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 21,
     letterSpacing: 0.25,
-    color: '#6E77EE',
+    color: 'black',
     textAlign: 'center',
     fontFamily: 'Modernist-Bold'
   },

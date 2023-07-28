@@ -13,7 +13,7 @@ const HeaderComponent = (props) => {
       <Text
         style={{
           fontSize: 30,
-          color: '#A460ED',
+          color: 'black',
           textAlign: 'left',
           fontFamily: 'Modernist-Bold',
         }}

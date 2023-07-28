@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     width: 255,
-    height: 170,
+    height: 200,
   },
   title: {
     fontSize: 18,

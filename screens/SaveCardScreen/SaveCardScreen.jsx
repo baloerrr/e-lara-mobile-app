@@ -22,6 +22,7 @@ const SaveCardScreen = () => {
   const numColumns = 2
   const [selectCard, setSelectedCard] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [deletedIds, setDeletedIds] = useState([])
   const fontsLoaded = useCustomFonts()
 
   const deleteData = async (item) => {
@@ -36,6 +37,7 @@ const SaveCardScreen = () => {
       setSavedBeasiswa((prevSavedBeasiswa) =>
         prevSavedBeasiswa.filter((beasiswa) => beasiswa.id !== item.id),
       )
+      setDeletedIds((prevDeletedIds) => [...prevDeletedIds, item.id])
       console.log(item.id)
     } catch (error) {
       console.log(error.message)
@@ -45,12 +47,23 @@ const SaveCardScreen = () => {
   const fetchData = async () => {
     try {
       const currentUser = firebase.auth().currentUser.uid
+      const twentyFourAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+
       const snapshot = await firebase
         .firestore()
         .collection('savedBeasiswa')
         .where('userId', '==', currentUser)
         .get()
-      const beasiswaData = snapshot.docs.map((doc) => doc.data())
+      const beasiswaData = snapshot.docs
+        .map((doc) => {
+          const data = doc.data()
+          const timestamps = data.timeStamps.toDate()
+          return {
+            ...data,
+            timeStamps: timestamps,
+          }
+        })
+        .filter((item) => item.timeStamps > twentyFourAgo)
       setSavedBeasiswa(beasiswaData)
     } catch (error) {
       console.log(error.message)
@@ -72,30 +85,27 @@ const SaveCardScreen = () => {
     setIsModalVisible(!isModalVisible)
   }
 
-  const handleOpenBrowser = async () => {
-    const url =
-      'https://bicara131.bi.go.id/knowledgebase/article/KA-01126/en-us'
-    const supported = await Linking.canOpenURL(url)
-
-    if (supported) {
-      await Linking.openURL(url)
-    } else {
-      console.log('Cannot open URL')
-    }
-  }
-
   if (!fontsLoaded) {
     return null
   }
 
   const renderCard = ({ item, index }) => {
     const isLastItem = index === savedBeasiswa.length - 1
+    const isOddItems = savedBeasiswa.length % 2 !== 0
 
     const onPressCard = () => {
       toggleModal(item)
     }
 
-    return <SavedCard item={item} index={index} onPressCard={onPressCard} />
+    return (
+      <SavedCard
+        item={item}
+        index={index}
+        isLastItem={isLastItem}
+        isOddItems={isOddItems}
+        onPressCard={onPressCard}
+      />
+    )
   }
 
   return (
@@ -132,7 +142,6 @@ const SaveCardScreen = () => {
             isModalVisible={isModalVisible}
             toggleModal={toggleModal}
             props={selectCard}
-            handleOpenBrowser={handleOpenBrowser}
             FontAwesome={FontAwesome}
             onDelete={deleteData}
           />

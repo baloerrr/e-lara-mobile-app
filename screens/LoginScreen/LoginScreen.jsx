@@ -5,7 +5,6 @@ import {
   Pressable,
   ActivityIndicator,
   TouchableOpacity,
-  ImageBackground,
 } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -21,6 +20,11 @@ const LoginScreen = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword)
+  }
 
   const {
     login,
@@ -62,30 +66,23 @@ const LoginScreen = () => {
     messageType = ''
   }
 
-  console.log(messageType)
-
   if (!fontsLoaded) {
     return null
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={require('../../assets/E-Lara/login_background.png')}
-        style={styles.container}
-      >
-        <View style={styles.headerContainer}>
-          <Text style={styles.title}>Selamat Datang</Text>
-          <Text style={styles.subtitle}>masuk dan mulai lah!</Text>
-        </View>
+      <View style={styles.container}>
         <View style={styles.formContainer}>
-          <Text style={styles.title2}>Masuk</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.title}>Selamat Datang</Text>
+            <Text style={styles.subtitle}>masuk dan mulai lah!</Text>
+          </View>
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Email</Text>
             <View style={styles.inputContainer}>
               <FontAwesome
                 name="envelope"
-                color="#F07DEA"
+                color="#4F4559"
                 size={20}
                 style={styles.icon}
               />
@@ -98,11 +95,10 @@ const LoginScreen = () => {
             </View>
           </View>
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Password</Text>
             <View style={styles.inputContainer}>
               <FontAwesome
                 name="lock"
-                color="#F07DEA"
+                color="#4F4559"
                 size={25}
                 style={styles.icon}
               />
@@ -111,8 +107,22 @@ const LoginScreen = () => {
                 style={styles.input}
                 placeholder="Password"
                 value={password}
-                secureTextEntry={true}
+                secureTextEntry={!showPassword}
               />
+              <TouchableOpacity
+                onPress={togglePassword}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  marginRight: 15,
+                }}
+              >
+                <FontAwesome
+                  name={showPassword ? 'eye' : 'eye-slash'}
+                  color={showPassword ? '#4F4559' : 'grey'}
+                  size={21}
+                />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.buttonContainer}>
@@ -134,10 +144,10 @@ const LoginScreen = () => {
               </Pressable>
             </View>
 
-            <Text style={styles.orText}>Atau dengan</Text>
+            {/* <Text style={styles.orText}>Atau dengan</Text> */}
           </View>
 
-          <View style={styles.googleButtonContainer}>
+          {/* <View style={styles.googleButtonContainer}>
             <FontAwesome
               name="google"
               color="#A460ED"
@@ -160,9 +170,9 @@ const LoginScreen = () => {
                 </Text>
               )}
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
-      </ImageBackground>
+      </View>
 
       {modalVisible ? (
         <ModalAlert

@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import LandingScreen from '../screens/LandingScreen/LandingScreen.jsx'
 import LoginScreen from '../screens/LoginScreen/LoginScreen.jsx'
 import RegisterScreen from '../screens/RegisterScreen/RegisterScreen.jsx'
-import MatchingScreen from '../screens/MatchingScreen/MatchingScreen.jsx'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen.jsx'
 import { AuthContext } from '../hooks/AuthProvider'
 import BottomNavigationBar from './BottomNavigationBar.jsx'
@@ -52,18 +51,6 @@ const StackNavigator = () => {
 
   checkAsyncStorage()
 
-  // const resetApp = async () => {
-  //   try {
-  //     await AsyncStorage.removeItem('alreadyLaunched')
-  //     setIsFirstLaunched(true)
-  //   } catch (error) {
-  //     console.warn('Error resetting app:', error)
-  //   }
-  // }
-
-  // // Panggil fungsi resetApp untuk mereset aplikasi (hapus AsyncStorage)
-  // resetApp()
-
   return (
     <Stack.Navigator initialRouteName={routeName}>
       {user || token ? (
@@ -71,13 +58,6 @@ const StackNavigator = () => {
           <Stack.Screen
             name="Home"
             component={BottomNavigationBar}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Matching"
-            component={MatchingScreen}
             options={{
               headerShown: false,
             }}
@@ -100,15 +80,15 @@ const StackNavigator = () => {
       ) : (
         <>
           <Stack.Screen
-            name="OnBoarding"
-            component={OnBoardingScreen}
+            name="Landing"
+            component={LandingScreen}
             options={{
               headerShown: false,
             }}
           />
           <Stack.Screen
-            name="Landing"
-            component={LandingScreen}
+            name="OnBoarding"
+            component={OnBoardingScreen}
             options={{
               headerShown: false,
             }}

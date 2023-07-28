@@ -5,6 +5,7 @@ const InputPhone = (props) => {
   return (
     <PhoneInput
       defaultValue={props.defaultValue}
+      defaultCode="ID"
       placeholder={props.placeholder}
       onChangeText={props.onChangeText}
       containerStyle={props.containerStyle}

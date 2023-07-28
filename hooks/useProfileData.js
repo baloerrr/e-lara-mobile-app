@@ -9,7 +9,7 @@ const useProfileData = () => {
   const [image, setImage] = useState(null)
   const [namaLengkap, setNamaLengkap] = useState('')
   const [noHandphone, setNoHandphone] = useState('')
-  const [perguruanTinggi, setPerguruanTinggi] = useState('')
+  const [instansi, setInstansi] = useState('')
   const [semester, setSemester] = useState('')
   const [jurusan, setJurusan] = useState('')
   const { user, getUser } = useContext(AuthContext)
@@ -88,6 +88,9 @@ const useProfileData = () => {
         const userData = await getUserData()
         setNamaLengkap(userData.namaLengkap || '')
         setNoHandphone(userData.noHandphone || '')
+        setInstansi(userData.instansi || '')
+        setJurusan(userData.jurusan || '')
+        setSemester(userData.semester || '')
       } catch (error) {
         console.log(error.message)
       }
@@ -120,7 +123,7 @@ const useProfileData = () => {
 
       const userData = {
         namaLengkap: namaLengkap,
-        perguruanTinggi: perguruanTinggi,
+        instansi: instansi,
         semester: semester,
         jurusan: jurusan,
         noHandphone: noHandphone,
@@ -140,10 +143,10 @@ const useProfileData = () => {
     pickImage,
     namaLengkap,
     setNamaLengkap,
-    perguruanTinggi,
-    setPerguruanTinggi,
     jurusan,
     setJurusan,
+    instansi,
+    setInstansi,
     semester,
     setSemester,
     noHandphone,

@@ -2,48 +2,40 @@ import React from 'react'
 import { useState } from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 
-const SavedCard = ({ item, index, onPressCard, onDelete }) => {
-  const [savedBeasiswa, setSavedBeasiswa] = useState([])
-  const isLastItem = index === savedBeasiswa.length - 1
-  const [isModalVisible, setIsModalVisible] = useState(false)
-
-  const handleDelete = () => {
-    setIsModalVisible(true)
-  }
-
-  const handleConfirm = () => {
-    setIsModalVisible(false)
-    onDelete(item)
-  }
-
-  const handleCancel = () => {
-    setIsModalVisible(false)
-  }
-
+const SavedCard = ({ item, index, onPressCard, isLastItem, isOddItems }) => {
   return (
     <>
-      <TouchableOpacity
-        onPress={onPressCard}
-        style={[styles.cardContainer, isLastItem && { marginBottom: 25 }]}
-      >
-        <Image
-          resizeMode={isLastItem ? 'stretch' : 'contain'}
-          source={{ uri: item.gambar }}
-          style={
-            isLastItem
-              ? {
-                  width: '100%',
-                  height: 210,
-                  borderTopLeftRadius: 8,
-                  borderTopRightRadius: 8,
-                }
-              : styles.image
-          }
-        />
-        <View style={styles.content}>
-          <Text style={styles.title}>{item.nama}</Text>
-        </View>
-      </TouchableOpacity>
+      {isOddItems && isLastItem ? (
+        <TouchableOpacity
+          onPress={onPressCard}
+          style={[styles.cardContainer, { marginBottom: 25 }]}
+        >
+          <Image
+            resizeMode="stretch"
+            source={{ uri: item.gambar }}
+            style={{
+              width: '100%',
+              height: 210,
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+            }}
+          />
+          <View style={styles.content}>
+            <Text style={styles.title}>{item.nama}</Text>
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={onPressCard} style={styles.cardContainer}>
+          <Image
+            resizeMode={'contain'}
+            source={{ uri: item.gambar }}
+            style={styles.image}
+          />
+          <View style={styles.content}>
+            <Text style={styles.title}>{item.nama}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </>
   )
 }

@@ -6,7 +6,11 @@ const width = Dimensions.get('window').width
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#A460ED',
+    backgroundColor: 'white',
+  },
+
+  scrollView: {
+    flexGrow: 1, 
   },
 
   registerContainer: {
@@ -17,8 +21,8 @@ export const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 36,
-    color: 'white',
+    fontSize: 30,
+    color: 'black',
     marginTop: 15,
     fontFamily: 'Modernist-Bold',
     textAlign: 'center'
@@ -58,6 +62,7 @@ export const styles = StyleSheet.create({
   googleButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 30
   },
 
   input: {
@@ -69,6 +74,11 @@ export const styles = StyleSheet.create({
     height: 60,
     fontFamily: 'Modernist-Regular',
     paddingLeft: 60
+  },
+
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   inputPhone: {
@@ -107,7 +117,7 @@ export const styles = StyleSheet.create({
     width: 320,
     height: 55,
     elevation: 3,
-    backgroundColor: '#F07DEA',
+    backgroundColor: '#A460ED',
     borderRadius: 20,
     flexDirection: 'column',
     alignItems: 'center',
@@ -126,20 +136,12 @@ export const styles = StyleSheet.create({
   },
 
   textButtonPink: {
-    fontSize: 24,
+    fontSize: 20,
     lineHeight: 21,
     paddingTop: 3,
     letterSpacing: 0.25,
     color: 'white',
     fontFamily: 'Modernist-Bold'
-  },
-
-  textButtonWhite: {
-    fontSize: 18,
-    letterSpacing: 0.25,
-    fontFamily: 'Modernist-Bold',
-    color: '#A460ED',
-    paddingLeft: 30
   },
 
   loginLink: {
@@ -152,7 +154,7 @@ export const styles = StyleSheet.create({
   loginText: {
     fontSize: 15,
     fontFamily: 'Modernist-Regular',
-    color: 'white'
+    color: '#4F4559'
   },
 
   textLinkLogin: {

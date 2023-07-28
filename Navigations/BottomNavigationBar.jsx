@@ -1,10 +1,9 @@
 import React from 'react'
-import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen/HomeScreen'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen.jsx'
-import FormMatching from '../screens/FormMatching/FormMatching.jsx'
 import SaveCardScreen from '../screens/SaveCardScreen/SaveCardScreen.jsx'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator()
 
@@ -18,36 +17,22 @@ const BottomNavigationBar = () => {
           let rn = route.name
 
           if (rn === 'Beranda') {
-            iconName = focused
-              ? require('../assets/E-Lara/card.png')
-              : require('../assets/E-Lara/card_fill.png')
+            iconName = focused ? 'cards' : 'cards-outline'
           } else if (rn === 'Form Matching') {
             iconName = focused
               ? require('../assets/E-Lara/card.png')
               : require('../assets/E-Lara/card_fill.png')
           } else if (rn === 'SaveCard') {
-            iconName = focused
-              ? require('../assets/E-Lara/love.png')
-              : require('../assets/E-Lara/love_fill.png')
+            iconName = focused ? 'cards-heart' : 'cards-heart-outline'
           } else if (rn === 'Profile') {
-            iconName = focused
-              ? require('../assets/E-Lara/profile.png')
-              : require('../assets/E-Lara/profile_fill.png')
+            iconName = focused ? 'account' : 'account-outline'
           }
 
           return (
-            <Image
-              source={iconName}
-              resizeMode="contain"
-              style={{
-                width: 22,
-                height: 22,
-                tintColor: color,
-              }}
-            />
+            <MaterialCommunityIcons name={iconName} size={29} color={color} />
           )
         },
-        activeTintColor: '#F07DEA',
+        activeTintColor: 'white',
         tabBarStyle: {
           height: 65,
           margin: 10,
@@ -56,6 +41,7 @@ const BottomNavigationBar = () => {
         },
         headerShown: false,
         tabBarShowLabel: false,
+        tabBarActiveTintColor: '#A460ED',
       })}
     >
       <Tab.Screen name="Beranda" component={HomeScreen} />

@@ -1,14 +1,5 @@
 import React, { useState } from 'react'
-import {
-  View,
-  Alert,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  Pressable,
-  StyleSheet,
-} from 'react-native'
+import { View, Alert, Text, TouchableOpacity, FlatList } from 'react-native'
 import Swiper from 'react-native-deck-swiper'
 import DropDownPicker from 'react-native-dropdown-picker'
 import HeaderComponent from '../../components/Header/HeaderComponent'
@@ -37,12 +28,7 @@ const FormMatching = () => {
     rangeUangSaku: [0, 1000],
   })
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const {
-    jenjangState,
-    jurusanState,
-    rangeUangSakuState,
-    reset,
-  } = useDropdownState()
+  const { jenjangState, jurusanState, rangeUangSakuState } = useDropdownState()
   const fontsLoaded = useCustomFonts()
   const {
     matchingBeasiswa,
@@ -125,6 +111,7 @@ const FormMatching = () => {
               marginTop: 20,
               marginHorizontal: 20,
               gap: 8,
+              alignItems: 'center',
             }}
           >
             <HeaderComponent title="Matching" />
@@ -135,7 +122,7 @@ const FormMatching = () => {
                 fontFamily: 'Modernist-Regular',
               }}
             >
-              Ayoo Beaswan.. {'\n'}temukan beasiswa impian mu disini!!
+              temukan beasiswa impian mu disini!!
             </Text>
           </View>
           <Swiper
@@ -162,7 +149,7 @@ const FormMatching = () => {
               flexDirection: 'row',
               justifyContent: 'space-around',
               alignItems: 'center',
-              paddingBottom: 100,
+              marginBottom: 100,
             }}
           >
             <TouchableOpacity
@@ -176,11 +163,11 @@ const FormMatching = () => {
               }}
               onPress={handleSwipeRight}
             >
-              <Entypo color={'#F07DEA'} name="cross" size={30} />
+              <Entypo color={'#A661ED'} name="cross" size={30} />
             </TouchableOpacity>
             <TouchableOpacity
               style={{
-                backgroundColor: '#F07DEA',
+                backgroundColor: '#A661ED',
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 40,
@@ -202,7 +189,7 @@ const FormMatching = () => {
               }}
               onPress={toggleModal}
             >
-              <FontAwesome color={'#F07DEA'} name="angle-double-up" size={30} />
+              <FontAwesome color={'#A661ED'} name="angle-double-up" size={30} />
             </TouchableOpacity>
           </View>
 
@@ -245,7 +232,7 @@ const FormMatching = () => {
             >
               <Text
                 style={{
-                  fontSize: 19,
+                  fontSize: 17,
                   color: 'white',
                   fontFamily: 'Modernist-Bold',
                 }}
@@ -283,7 +270,7 @@ const FormMatching = () => {
                     <Text
                       style={{
                         fontSize: 15,
-                        color: '#A460ED',
+                        color: 'black',
                         fontFamily: 'Modernist-Bold',
                       }}
                     >
@@ -309,7 +296,7 @@ const FormMatching = () => {
                     <Text
                       style={{
                         fontSize: 15,
-                        color: '#A460ED',
+                        color: 'black',
                         fontFamily: 'Modernist-Bold',
                       }}
                     >
@@ -368,7 +355,7 @@ const FormMatching = () => {
                     <Text
                       style={{
                         fontSize: 15,
-                        color: '#A460ED',
+                        color: 'black',
                         fontFamily: 'Modernist-Bold',
                       }}
                     >
@@ -416,7 +403,7 @@ const FormMatching = () => {
                     <Text
                       style={{
                         fontSize: 15,
-                        color: '#A460ED',
+                        color: 'black',
                         fontFamily: 'Modernist-Bold',
                       }}
                     >
@@ -433,13 +420,13 @@ const FormMatching = () => {
                     minimumValue={0}
                     maximumValue={4}
                     step={0.01}
-                    thumbTintColor="#F07DEA"
+                    thumbTintColor="#A460ED"
                     thumbStyle={{
                       width: 35,
                       height: 35,
                       borderRadius: 20,
                     }}
-                    minimumTrackTintColor="#F07DEA"
+                    minimumTrackTintColor="#A460ED"
                     maximumTrackTintColor="#E8E6EA"
                     onValueChange={(value) => {
                       const roundedValue = Number(value.toFixed(2))
@@ -459,7 +446,7 @@ const FormMatching = () => {
                     <Text
                       style={{
                         fontSize: 15,
-                        color: '#A460ED',
+                        color: 'black',
                         fontFamily: 'Modernist-Bold',
                       }}
                     >
@@ -476,9 +463,9 @@ const FormMatching = () => {
                     minimumValue={0}
                     maximumValue={14}
                     step={1}
-                    thumbTintColor="#F07DEA"
+                    thumbTintColor="#A460ED"
                     thumbStyle={{ width: 35, height: 35, borderRadius: 20 }}
-                    minimumTrackTintColor="#F07DEA"
+                    minimumTrackTintColor="#A460ED"
                     maximumTrackTintColor="#E8E6EA"
                     onValueChange={(value) => {
                       setUserVector((prevUserVector) => ({
@@ -497,7 +484,7 @@ const FormMatching = () => {
                     <Text
                       style={{
                         fontSize: 15,
-                        color: '#A460ED',
+                        color: 'black',
                         fontFamily: 'Modernist-Bold',
                       }}
                     >
@@ -538,34 +525,38 @@ const FormMatching = () => {
                     />
                   </View>
 
-                  <TouchableOpacity
-                    style={{
-                      paddingVertical: 7,
-                      paddingHorizontal: 72,
-                      borderRadius: 4,
-                      elevation: 3,
-                      backgroundColor: '#F07DEA',
-                      borderRadius: 15,
-                      width: 315,
-                      height: 55,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginBottom: 120,
-                    }}
-                    onPress={handleFindMatchingBeasiswa}
+                  <View
+                    style={{ flexDirection: 'row', justifyContent: 'center' }}
                   >
-                    <Text
+                    <TouchableOpacity
                       style={{
-                        fontSize: 20,
-                        letterSpacing: 0.25,
-                        color: 'white',
-                        fontFamily: 'Modernist-Bold',
+                        paddingVertical: 7,
+                        paddingHorizontal: 72,
+                        borderRadius: 4,
+                        elevation: 3,
+                        backgroundColor: '#A460ED',
+                        borderRadius: 20,
+                        width: 315,
+                        height: 50,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginBottom: 135,
                       }}
+                      onPress={handleFindMatchingBeasiswa}
                     >
-                      Konfirmasi
-                    </Text>
-                  </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          letterSpacing: 0.25,
+                          color: 'white',
+                          fontFamily: 'Modernist-Bold',
+                        }}
+                      >
+                        Konfirmasi
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             )}

@@ -3,31 +3,36 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white'
   },
 
   loginContainer: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
 
   headerContainer: {
     justifyContent: 'center',
     paddingHorizontal: 20,
-    marginTop: 10,
+    marginVertical: 25,
   },
 
   title: {
-    color: 'white',
+    color: 'black',
     fontSize: 30,
     fontFamily: 'Modernist-Bold',
     marginTop: 30,
     lineHeight: 50,
     letterSpacing: 1,
+    textAlign: 'center'
   },
 
   subtitle: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     fontFamily: 'Modernist-Regular',
+    textAlign: 'center'
   },
 
   formContainer: {
@@ -51,7 +56,7 @@ export const styles = StyleSheet.create({
   },
 
   label: {
-    color: '#A460ED',
+    color: 'black',
     marginBottom: 5,
     fontFamily: 'Modernist-regular',
   },
@@ -83,9 +88,9 @@ export const styles = StyleSheet.create({
 
   buttonPink: {
     width: 320,
-    height: 55,
+    height: 50,
     elevation: 3,
-    backgroundColor: '#F07DEA',
+    backgroundColor: '#A661ED',
     borderRadius: 15,
     flexDirection: 'column',
     alignItems: 'center',
@@ -93,35 +98,11 @@ export const styles = StyleSheet.create({
   },
 
   textButtonPink: {
-    fontSize: 24,
+  fontSize: 20,
     lineHeight: 21,
     letterSpacing: 0.25,
     color: 'white',
     fontFamily: 'Modernist-Bold',
-  },
-
-  googleButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-
-  buttonWhite: {
-    width: 320,
-    height: 55,
-    elevation: 3,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  textButtonWhite: {
-    fontSize: 18,
-    letterSpacing: 0.25,
-    fontFamily: 'Modernist-Bold',
-    color: '#A460ED',
   },
 
   registerLink: {
@@ -134,11 +115,6 @@ export const styles = StyleSheet.create({
   registerText: {
     fontSize: 15,
     fontFamily: 'Modernist-Regular',
-  },
-
-  orText: {
-    fontFamily: 'Modernist-Regular',
-    marginTop: 15,
   },
 
   textLinkRegister: {

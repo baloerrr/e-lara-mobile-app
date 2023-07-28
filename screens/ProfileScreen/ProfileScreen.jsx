@@ -12,6 +12,7 @@ import { TouchableOpacity } from 'react-native'
 import { Image } from 'react-native'
 import useProfileData from '../../hooks/useProfileData'
 import HeaderComponent from '../../components/Header/HeaderComponent'
+import { FontAwesome } from '@expo/vector-icons'
 
 const ProfileScreen = () => {
   const { logout, user } = useContext(AuthContext)
@@ -23,13 +24,13 @@ const ProfileScreen = () => {
     jurusan,
     namaLengkap,
     noHandphone,
-    perguruanTinggi,
+    instansi,
     pickImage,
     semester,
     setJurusan,
     setNamaLengkap,
     setNoHandphone,
-    setPerguruanTinggi,
+    setInstansi,
     setSemester,
   } = useProfileData()
 
@@ -124,6 +125,17 @@ const ProfileScreen = () => {
                     alignItems: 'center',
                   }}
                 >
+                  <FontAwesome
+                    name="camera"
+                    size={25}
+                    style={{
+                      position: 'absolute',
+                      right: 4,
+                      bottom: 17,
+                      zIndex: 2,
+                    }}
+                    color="black"
+                  />
                   {!user.photoURL || image ? (
                     <Image
                       source={{ uri: image }}
@@ -173,8 +185,8 @@ const ProfileScreen = () => {
             <Text style={styles.text}>Perguruan Tinggi</Text>
             <TextInput
               style={!isEditing ? styles.input : styles.inputSetEdit}
-              value={perguruanTinggi}
-              onChangeText={setPerguruanTinggi}
+              value={instansi}
+              onChangeText={setInstansi}
               editable={isEditing}
               placeholder="Masukkan perguruan tinggi anda"
             />
@@ -184,6 +196,7 @@ const ProfileScreen = () => {
               style={!isEditing ? styles.input : styles.inputSetEdit}
               value={semester}
               onChangeText={setSemester}
+              keyboardType="default"
               editable={isEditing}
               placeholder="Masukkan semester anda "
             />
@@ -211,7 +224,7 @@ const ProfileScreen = () => {
               flexDirection: 'column',
               alignItems: 'center',
               gap: 10,
-              marginBottom: 80,
+              marginBottom: 100,
             }}
           >
             {!isEditing ? (
@@ -235,7 +248,7 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   text: {
-    color: '#A460ED',
+    color: 'black',
   },
 
   emailText: {
@@ -269,9 +282,9 @@ const styles = StyleSheet.create({
 
   buttonPink: {
     width: 320,
-    height: 55,
+    height: 50,
     elevation: 3,
-    backgroundColor: '#F07DEA',
+    backgroundColor: '#A661ED',
     borderRadius: 20,
     flexDirection: 'column',
     alignItems: 'center',
@@ -288,9 +301,9 @@ const styles = StyleSheet.create({
 
   buttonWhite: {
     width: 320,
-    height: 55,
-    // elevation: 3,
-    backgroundColor: '#EEEEEE',
+    height: 50,
+    backgroundColor: '#E6E6E6',
+    opacity: 0.5,
     borderRadius: 20,
     flexDirection: 'column',
     alignItems: 'center',
@@ -300,9 +313,10 @@ const styles = StyleSheet.create({
   textButtonWhite: {
     fontSize: 18,
     lineHeight: 21,
-    fontWeight: 'bold',
     letterSpacing: 0.25,
-    color: '#A460ED',
+    color: 'black',
+    textAlign: 'center',
+    fontFamily: 'Modernist-Bold',
   },
 })
 

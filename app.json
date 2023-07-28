@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFFFFF"
     },
     "plugins": [
       [
@@ -24,13 +24,12 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundlerIdentifier": "com.polsri.elara",
       "bundleIdentifier": "com.polsri.elara"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#A460ED"
       },
       "package": "com.polsri.elara"
     },

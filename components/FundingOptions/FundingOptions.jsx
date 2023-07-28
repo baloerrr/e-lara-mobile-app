@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#A460ED',
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 15,
     color: 'gray',
     fontFamily: 'Modernist-Bold',
   },
